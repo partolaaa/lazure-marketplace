@@ -84,7 +84,7 @@ public class ProductsController {
 
     @GetMapping("/search-config")
     public ResponseEntity<?> handleSearchConfig(@RequestParam List<Integer> selectedCategory) {
-        System.out.println(selectedCategory);
+        //System.out.println(selectedCategory);
 
         return ResponseEntity.ok("Search configured successfully!");
     }

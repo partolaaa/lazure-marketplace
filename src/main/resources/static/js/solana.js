@@ -119,9 +119,9 @@ class WalletManager {
         walletShortInfo.classList.add("loader-spinner");
 
         try {
+            walletShortInfo.classList.remove("loader-spinner");
             const balance = await this.getAccountBalance(this.wallet.publicKey);
             const shortWalletAddress = this.shortenWalletAddress(this.getWalletString());
-            walletShortInfo.classList.remove("loader-spinner");
             walletShortInfo.innerText = `${shortWalletAddress} ${parseFloat(balance).toFixed(2)} SOL`;
         } catch (error) {
             walletShortInfo.innerText = "Failed to load data";

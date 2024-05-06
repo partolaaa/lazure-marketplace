@@ -1,11 +1,10 @@
-document.getElementById("configure-search-button").addEventListener("click", function () {
+document.getElementById("configure-search-button").addEventListener("click", function (event) {
     document.getElementById('search-config').classList.add('open-search-config');
 });
 
-document.getElementById("close-search-config").addEventListener("click", function () {
+document.getElementById("close-search-config").addEventListener("click", function (event) {
     document.getElementById('search-config').classList.remove('open-search-config');
 });
-
 
 document.addEventListener('DOMContentLoaded', function() {
     fetch('api/products/category')

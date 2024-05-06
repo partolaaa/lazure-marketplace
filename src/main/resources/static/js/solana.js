@@ -114,16 +114,17 @@ class WalletManager {
         if (!this.wallet) {
             await this.connectWallet();
         }
-
+        let walletShortInfo = document.getElementById("wallet-short-info");
         document.getElementById("wallet-info").classList.add("open-wallet-info");
-        document.getElementById("wallet-short-info").innerText = "Loading...";
+        walletShortInfo.classList.add("loader-spinner");
 
         try {
             const balance = await this.getAccountBalance(this.wallet.publicKey);
             const shortWalletAddress = this.shortenWalletAddress(this.getWalletString());
-            document.getElementById("wallet-short-info").innerText = `${shortWalletAddress} ${parseFloat(balance).toFixed(2)} SOL`;
+            walletShortInfo.classList.remove("loader-spinner");
+            walletShortInfo.innerText = `${shortWalletAddress} ${parseFloat(balance).toFixed(2)} SOL`;
         } catch (error) {
-            document.getElementById("wallet-short-info").innerText = "Failed to load data";
+            walletShortInfo.innerText = "Failed to load data";
             console.error("Failed to load wallet info:", error);
         }
     }

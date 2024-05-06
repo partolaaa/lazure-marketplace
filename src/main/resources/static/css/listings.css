@@ -13,7 +13,17 @@
     border-radius: 10px;
     cursor: pointer;
     flex-direction: column;
+    overflow: hidden;
 }
+
+.product:not(.add-product) img {
+    transition: transform 0.3s ease;
+}
+
+.product:not(.add-product):hover img {
+    transform: scale(1.1);
+}
+
 
 .product img {
     height: 100px;
@@ -263,4 +273,24 @@ input[type="submit"]:hover {
     gap: 10px;
     align-items: center;
     text-align: center;
+}
+
+.animated-background {
+    position: relative;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: linear-gradient(to right, var(--secondary-color) 8%, var(--secondary-contrast-color) 18%, var(--secondary-color) 33%);
+    background-size: 800px 104px;
+}
+
+@keyframes placeHolderShimmer {
+    0% {
+        background-position: -800px 0;
+    }
+    100% {
+        background-position: 800px 0;
+    }
 }

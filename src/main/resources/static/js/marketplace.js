@@ -121,7 +121,29 @@ function loadListings(limit= 20, isClearContainer) {
             }
             const fragment = document.createDocumentFragment();
             data.forEach(product => {
-                fragment.appendChild(createProductElement(product));
+                let productDiv = createProductElement(product);
+                productDiv.addEventListener("click", function () {
+                    //console.log(product.product_id);
+                    document.getElementById("popup-product-id").textContent = product.name;
+                    document.getElementById("overlay").style.display = 'block';
+                    document.getElementById("popup").style.display = 'block';
+
+                    document.getElementById("popup-product-image").src = productDiv.querySelector('img').src;
+                    document.getElementById("popup-product-description").textContent = product.description;
+                    document.getElementById("popup-product-price").textContent = product.price;
+                    document.getElementById("product-status-info").title = "This product is on sale now.";
+
+                    if (walletManager.wallet) {
+                        document.getElementById("popup-buy-button").onclick = function () {
+                            let buyLoader = document.getElementById("buy-loader");
+                            buyLoader.style.display = "block";
+                            walletManager.transferSol("HMg6tQYMpigM5656hK4XF5e6aAYDGyBmXqRJfDfYsNhq", product.price).then(r => buyLoader.style.display = "none");
+                        };
+                    } else {
+                        document.getElementById("popup-buy-menu").classList.add("blur-effect");
+                    }
+                });
+                fragment.appendChild(productDiv);
             });
             container.appendChild(fragment);
         })
@@ -133,3 +155,8 @@ function loadListings(limit= 20, isClearContainer) {
             loader.style.display = 'none';
         });
 }
+
+document.getElementById("close-popup").addEventListener('click', function() {
+    document.getElementById("overlay").style.display = 'none';
+    document.getElementById("popup").style.display = 'none';
+});

@@ -71,8 +71,8 @@
     margin: 0;
 }
 
-.short-product-info span {
-    color: white;
+.price {
+    color: var(--price-text-color);
 }
 
 #overlay {
@@ -82,7 +82,7 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(1px);
     transition: opacity 0.3s;
     z-index: 1000;
 }

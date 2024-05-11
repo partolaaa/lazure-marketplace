@@ -160,6 +160,7 @@ class WalletManager {
             }
         } catch (error) {
             createToast("error",'Error while sending your sol.');
+            console.error(error);
         }
     }
 

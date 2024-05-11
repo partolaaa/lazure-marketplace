@@ -19,6 +19,7 @@
     --toast-error: #E24D4C;
     --toast-warning: #E9BD0C;
     --toast-info: #3498DB;
+    --price-text-color: #F8F7F8;
     --filter-white-shadow: drop-shadow(0 0 0.2rem white);
 }
 body {

@@ -11,7 +11,7 @@
     <script th:src="@{/js/toast.js}" defer></script>
     <script th:src="@{/js/products.js}" defer></script>
     <script th:src="@{/js/marketplace.js}" defer></script>
-    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+    <script src="https://unpkg.com/@solana/web3.js@1.30.2/lib/index.iife.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
@@ -32,7 +32,32 @@
         </form>
     </div>
 
+    <div id="overlay" style="display:none;"></div>
+    <div id="popup" style="display:none;">
+        <button id="close-popup" class="close-popup close-button">&times;</button>
+        <h3 class="popup-name" id="popup-product-id">New Product</h3>
+        <hr>
 
+        <div class="popup-product-info">
+            <div id="popup-buy-menu">
+                <img src="" id="popup-product-image" alt="product image">
+                <div class="popup-product-buy">
+                    <div>
+                        <div class="popup-product-status-container">
+                            <h3>Listed</h3>
+                            <img class="info-icon" src="/img/info.png" alt="info" id="product-status-info">
+                        </div>
+                        <p class="price-container">
+                            <span id="popup-product-price"></span>
+                            <span class="price-ticker">SOL</span>
+                        </p>
+                    </div>
+                    <button id="popup-buy-button">Buy now<span class="loader-spinner" id="buy-loader" style="display: none"></span></button>
+                </div>
+            </div>
+            <p id="popup-product-description"></p>
+        </div>
+    </div>
 
     <div class="search-container">
         <div class="search-box">

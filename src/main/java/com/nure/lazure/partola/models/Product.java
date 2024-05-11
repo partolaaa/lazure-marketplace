@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class Product {
+    @JsonProperty("product_id")
+    private Integer productId;
     private String name;
     private String description;
     private Double price;

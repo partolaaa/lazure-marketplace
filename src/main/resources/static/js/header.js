@@ -39,8 +39,8 @@ document.getElementById('menu').addEventListener('click', function(event) {
     event.stopPropagation();
 });
 
-document.getElementById('profile-balance').addEventListener('click', function(event) {
+/*document.getElementById('profile-balance').addEventListener('click', function(event) {
     document.getElementById('wallet-info').classList.add('open-wallet-info');
     event.stopPropagation();
-});
+});*/
 

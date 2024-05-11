@@ -208,8 +208,9 @@ class WalletManager {
 }
 
 const walletManager = new WalletManager();
-document.getElementById('profile-balance').addEventListener('click', function() {
+document.getElementById('profile-balance').addEventListener('click', function(event) {
     walletManager.showWalletInfo();
+    event.stopPropagation();
 });
 
 document.getElementById('disconnect-wallet').addEventListener('click', function() {

@@ -7,7 +7,13 @@ header {
     justify-content: space-between;
     color: var(--text-color);
     font-family: Chakra, sans-serif;
-    margin-bottom: 50px;
+    padding: 5px;
+    border-bottom: 1px solid var(--secondary-contrast-color);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
 }
 header > div {
     display: flex;
@@ -152,4 +158,12 @@ ion-icon {
 
 .wallet-info-element:hover {
     background-color: transparent;
+}
+
+#menu:hover {
+    filter: var(--filter-white-shadow);
+}
+
+#logo:hover {
+    filter: var(--filter-white-shadow);
 }

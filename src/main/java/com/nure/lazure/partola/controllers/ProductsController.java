@@ -88,4 +88,23 @@ public class ProductsController {
 
         return ResponseEntity.ok("Search configured successfully!");
     }
+
+    @GetMapping("/get-products")
+    public ResponseEntity<?> getProducts(@RequestParam(required = false) Integer limit) {
+        try {
+            String url = "https://productsapi-954ed826b909.herokuapp.com/get-products";
+            if (limit != null) {
+                url += "?limit=" + limit;
+            }
+            ResponseEntity<List<Product>> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<>() {}
+            );
+            return ResponseEntity.ok(response.getBody());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error while retrieving products.");
+        }
+    }
 }

@@ -19,11 +19,13 @@
     --toast-error: #E24D4C;
     --toast-warning: #E9BD0C;
     --toast-info: #3498DB;
+    --filter-white-shadow: drop-shadow(0 0 0.2rem white);
 }
 body {
     background-color: var(--background-color);
     color: white;
     font-family: Chakra, sans-serif;
+    padding-top: 90px;
 }
 * {
     box-sizing: border-box;

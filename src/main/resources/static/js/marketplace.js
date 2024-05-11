@@ -1,8 +1,8 @@
-document.getElementById("configure-search-button").addEventListener("click", function (event) {
+document.getElementById("configure-search-button").addEventListener("click", function () {
     document.getElementById('search-config').classList.add('open-search-config');
 });
 
-document.getElementById("close-search-config").addEventListener("click", function (event) {
+document.getElementById("close-search-config").addEventListener("click", function () {
     document.getElementById('search-config').classList.remove('open-search-config');
 });
 
@@ -82,3 +82,54 @@ document.getElementById('search-config-form').addEventListener('submit', functio
             createToast("warning", error);
         });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    loadListings(40,true);
+
+    const container = document.querySelector('.main-products-container');
+
+    let isLoading = false;
+    let lastScrollTop = 0;
+    const threshold = 100;
+
+    container.addEventListener('scroll', function() {
+        const currentScrollTop = container.scrollTop;
+
+        if (currentScrollTop > lastScrollTop && currentScrollTop + container.clientHeight >= container.scrollHeight - threshold && !isLoading) {
+            isLoading = true;
+            loadMoreProducts();
+        }
+        lastScrollTop = currentScrollTop;
+    });
+
+    function loadMoreProducts(limit= 20) {
+        loadListings(limit, false).finally(() => {
+            isLoading = false;
+        });
+    }
+});
+
+function loadListings(limit= 20, isClearContainer) {
+    const loader = document.querySelector('.loader');
+    const container = document.querySelector('.main-products-container');
+
+    return fetch(`api/products/get-products?limit=${limit}`)
+        .then(response => response.json())
+        .then(data => {
+            if (isClearContainer) {
+                container.innerHTML = '';
+            }
+            const fragment = document.createDocumentFragment();
+            data.forEach(product => {
+                fragment.appendChild(createProductElement(product));
+            });
+            container.appendChild(fragment);
+        })
+        .catch(error => {
+            console.error("Failed to load products:", error);
+            createToast("error", "Failed to load products.");
+        })
+        .finally(() => {
+            loader.style.display = 'none';
+        });
+}

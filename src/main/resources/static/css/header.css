@@ -6,6 +6,7 @@ header {
     display: flex;
     justify-content: space-between;
     color: var(--text-color);
+    background-color: var(--background-color);
     font-family: Chakra, sans-serif;
     padding: 5px;
     border-bottom: 1px solid var(--secondary-contrast-color);

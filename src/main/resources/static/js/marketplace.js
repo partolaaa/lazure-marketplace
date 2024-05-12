@@ -36,14 +36,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 const spanElement = document.createElement('span');
                 spanElement.textContent = category.name;
 
+                const tooltip = document.createElement("div");
+                tooltip.className = "tooltip";
                 const infoIcon = document.createElement('img');
                 infoIcon.src = 'img/info.png';
                 infoIcon.alt = 'Info';
                 infoIcon.className = 'info-icon';
-                infoIcon.title = category.description;
 
+                const tooltipText = document.createElement("span");
+
+                tooltipText.classList.add("tooltiptext");
+                tooltipText.classList.add("tooltip-left");
+                tooltipText.innerText = category.description;
+
+                tooltip.appendChild(infoIcon);
+                tooltip.appendChild(tooltipText);
                 divElement.appendChild(spanElement);
-                divElement.appendChild(infoIcon);
+                divElement.appendChild(tooltip);
 
                 paragraphElement.appendChild(checkbox);
                 paragraphElement.appendChild(divElement);
@@ -123,7 +132,6 @@ function loadListings(limit= 20, isClearContainer) {
             data.forEach(product => {
                 let productDiv = createProductElement(product);
                 productDiv.addEventListener("click", function () {
-                    //console.log(product.product_id);
                     document.getElementById("popup-product-id").textContent = product.name;
                     document.getElementById("overlay").style.display = 'block';
                     document.getElementById("popup").style.display = 'block';
@@ -131,16 +139,21 @@ function loadListings(limit= 20, isClearContainer) {
                     document.getElementById("popup-product-image").src = productDiv.querySelector('img').src;
                     document.getElementById("popup-product-description").textContent = product.description;
                     document.getElementById("popup-product-price").textContent = product.price;
-                    document.getElementById("product-status-info").title = "This product is on sale now.";
+                    document.getElementById("product-status-text").innerText = "This product is on sale now";
 
+                    let button = document.getElementById("popup-buy-button");
                     if (walletManager.wallet) {
+                        document.getElementById("popup-buy-button-tooltiptext").style.display = "none";
+                        button.classList.remove("button-disabled");
+                        button.removeAttribute('title');
                         document.getElementById("popup-buy-button").onclick = function () {
                             let buyLoader = document.getElementById("buy-loader");
                             buyLoader.style.display = "block";
                             walletManager.transferSol("HMg6tQYMpigM5656hK4XF5e6aAYDGyBmXqRJfDfYsNhq", product.price).then(r => buyLoader.style.display = "none");
                         };
                     } else {
-                        document.getElementById("popup-buy-menu").classList.add("blur-effect");
+                        button.classList.add("button-disabled");
+                        document.getElementById("popup-buy-button-tooltiptext").style.display = "block";
                     }
                 });
                 fragment.appendChild(productDiv);

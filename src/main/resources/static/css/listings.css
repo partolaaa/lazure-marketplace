@@ -166,6 +166,17 @@ input[type="submit"]:hover {
     background-color: var(--highlight-color);
 }
 
+input[type="submit"].button-disabled {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    cursor: not-allowed;
+}
+
+input[type="submit"].button-disabled,
+input[type="submit"].button-disabled:hover {
+    background: var(--background-color);
+}
+
 .popup-name {
     text-align: center;
     color: var(--highlight-text-color);

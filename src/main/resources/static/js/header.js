@@ -41,7 +41,7 @@ document.getElementById('menu').addEventListener('click', function(event) {
 
 document.addEventListener("DOMContentLoaded", function() {
     const background = document.getElementById('background');
-    let colorArr = ["rgba(255, 97, 179, 0.5)", "rgba(255, 97, 133, 0.5)", "rgba(78, 184, 251, 0.5)"];
+    let colorArr = ["rgba(255, 97, 179, 0.5)", "rgba(255, 97, 133, 0.5)"];
 
     function randomRange(min, max) {
         return Math.random() * (max - min) + min;

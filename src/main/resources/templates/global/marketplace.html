@@ -46,14 +46,20 @@
                     <div>
                         <div class="popup-product-status-container">
                             <h3>Listed</h3>
-                            <img class="info-icon" src="/img/info.png" alt="info" id="product-status-info">
+                            <div class="tooltip">
+                                <img class="info-icon" src="/img/info.png" alt="info" id="product-status-info">
+                                <span class="tooltiptext" id="product-status-text"></span>
+                            </div>
                         </div>
                         <p class="price-container">
                             <span id="popup-product-price"></span>
                             <span class="price-ticker">SOL</span>
                         </p>
                     </div>
-                    <button id="popup-buy-button">Buy now<span class="loader-spinner" id="buy-loader" style="display: none"></span></button>
+                    <button id="popup-buy-button" class="tooltip">
+                        Buy now<span class="loader-spinner" id="buy-loader" style="display: none"></span>
+                        <span class="tooltiptext" id="popup-buy-button-tooltiptext" style="display: none">You need to connect your wallet to buy this</span>
+                    </button>
                 </div>
             </div>
             <p id="popup-product-description"></p>

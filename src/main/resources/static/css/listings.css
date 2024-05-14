@@ -1,3 +1,7 @@
+body {
+    overflow: hidden;
+}
+
 .add-product {
     position: absolute;
     left: max(40px, 3%);

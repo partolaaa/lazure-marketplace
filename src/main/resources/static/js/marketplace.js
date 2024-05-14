@@ -36,23 +36,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const spanElement = document.createElement('span');
                 spanElement.textContent = category.name;
 
-                const tooltip = document.createElement("div");
-                tooltip.className = "tooltip";
-                const infoIcon = document.createElement('img');
-                infoIcon.src = 'img/info.png';
-                infoIcon.alt = 'Info';
-                infoIcon.className = 'info-icon';
-
-                const tooltipText = document.createElement("span");
-
-                tooltipText.classList.add("tooltiptext");
-                tooltipText.classList.add("tooltip-left");
-                tooltipText.innerText = category.description;
-
-                tooltip.appendChild(infoIcon);
-                tooltip.appendChild(tooltipText);
                 divElement.appendChild(spanElement);
-                divElement.appendChild(tooltip);
+                divElement.appendChild(prepareCategoryToolTip(category));
 
                 paragraphElement.appendChild(checkbox);
                 paragraphElement.appendChild(divElement);

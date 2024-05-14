@@ -63,22 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 option.setAttribute('data-value', category.category_id);
                 option.textContent = category.name;
 
-                const tooltip = document.createElement("div");
-                tooltip.className = "tooltip";
-                const infoIcon = document.createElement('img');
-                infoIcon.src = 'img/info.png';
-                infoIcon.alt = 'Info';
-                infoIcon.className = 'info-icon';
-
-                const tooltipText = document.createElement("span");
-
-                tooltipText.classList.add("tooltiptext");
-                tooltipText.classList.add("tooltip-left");
-                tooltipText.innerText = category.description;
-
-                tooltip.appendChild(infoIcon);
-                tooltip.appendChild(tooltipText);
-                option.appendChild(tooltip);
+                option.appendChild(prepareCategoryToolTip(category));
 
                 option.addEventListener('click', function() {
                     let selectedValue = this.getAttribute('data-value');
@@ -86,8 +71,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     hiddenInput.value = selectedValue;
                     document.querySelectorAll('.custom-option').forEach(opt => opt.classList.remove('selected'));
                     this.classList.add('selected');
-                    document.querySelector('.custom-select__trigger span').textContent = this.textContent;
+                    document.querySelector('.custom-select__trigger span').textContent = this.firstChild.textContent.trim();
                 });
+
 
                 container.appendChild(option);
             });

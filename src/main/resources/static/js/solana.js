@@ -151,7 +151,7 @@ class WalletManager {
                 let signed = await provider.signTransaction(transaction);
                 let signature = await connection.sendRawTransaction(signed.serialize());
                 await connection.confirmTransaction(signature);
-                //console.log('Transaction successful:', signature);
+
                 createToast("success", `You successfully sent ${amount} to ${this.shortenWalletAddress(recipientWalletAddress)}!`)
                 let balance = await this.getAccountBalance(this.wallet.publicKey);
                 document.getElementById("balance").innerText = `${parseFloat(balance).toFixed(2)} SOL`;
@@ -160,7 +160,7 @@ class WalletManager {
             }
         } catch (error) {
             createToast("error",'Error while sending your sol.');
-            console.error(error);
+            //console.error(error);
         }
     }
 
@@ -217,3 +217,13 @@ document.getElementById('profile-balance').addEventListener('click', function(ev
 document.getElementById('disconnect-wallet').addEventListener('click', function() {
     walletManager.disconnectWallet();
 });
+
+async function handleTransferSol(product, buyLoader) {
+    try {
+        const walletID = await getProductOwnerWalletByProductId(product.product_id);
+        await walletManager.transferSol(walletID, product.price);
+        buyLoader.style.display = "none";
+    } catch (error) {
+        console.error(error);
+    }
+}

@@ -2,8 +2,10 @@ package com.nure.lazure.partola.controllers;
 
 import com.nure.lazure.partola.models.Category;
 import com.nure.lazure.partola.models.Product;
+import com.nure.lazure.partola.models.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Ivan Partola
@@ -22,9 +25,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/products")
 @RestController
+@Slf4j
 public class ProductsController {
     private final RestTemplate restTemplate;
-
+    private final String PRODUCTS_API_URL = "https://productsapi-954ed826b909.herokuapp.com";
+    private final String ACCOUNTS_API_URL = "https://accountsapi-3a5f92f4b3d5.herokuapp.com/users";
     @Autowired
     public ProductsController(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
@@ -38,7 +43,7 @@ public class ProductsController {
             HttpEntity<Product> request = new HttpEntity<>(product, headers);
 
             restTemplate.exchange(
-                    "https://productsapi-954ed826b909.herokuapp.com/product",
+                    PRODUCTS_API_URL+"/product",
                     HttpMethod.POST,
                     request,
                     String.class
@@ -46,6 +51,7 @@ public class ProductsController {
 
             return ResponseEntity.ok("Product added successfully.");
         } catch (Exception e) {
+            log.error(e.toString());
             return ResponseEntity.badRequest().body("Error while adding a new product.");
         }
     }
@@ -53,7 +59,7 @@ public class ProductsController {
     @GetMapping("/wallet/{wallet}")
     public ResponseEntity<?> getAllProductsByWallet(@PathVariable String wallet) {
         try {
-            String url = "https://productsapi-954ed826b909.herokuapp.com/wallet/" + wallet;
+            String url = PRODUCTS_API_URL+"/wallet/" + wallet;
             ResponseEntity<List<Product>> response = restTemplate.exchange(
                     url,
                     HttpMethod.GET,
@@ -62,6 +68,7 @@ public class ProductsController {
             );
             return ResponseEntity.ok(response.getBody());
         } catch (Exception e) {
+            log.error(e.toString());
             return ResponseEntity.badRequest().body("Error while retrieving products.");
         }
     }
@@ -69,7 +76,7 @@ public class ProductsController {
     @GetMapping("/category")
     public ResponseEntity<?> getCategories() {
         try {
-            String url = "https://productsapi-954ed826b909.herokuapp.com/category";
+            String url = PRODUCTS_API_URL+"/category";
             ResponseEntity<List<Category>> response = restTemplate.exchange(
                     url,
                     HttpMethod.GET,
@@ -78,6 +85,7 @@ public class ProductsController {
             );
             return ResponseEntity.ok(response.getBody());
         } catch (Exception e) {
+            log.error(e.toString());
             return ResponseEntity.badRequest().body("Error while getting categories.");
         }
     }
@@ -89,14 +97,44 @@ public class ProductsController {
         return ResponseEntity.ok("Search configured successfully!");
     }
 
+
     @GetMapping("/get-products")
-    public ResponseEntity<?> getProducts(@RequestParam(required = false) Integer limit) {
+    public ResponseEntity<?> getProducts(@RequestParam(defaultValue = "20") int limit,
+                                         @RequestParam Optional<String> title,
+                                         @RequestParam Optional<List<Integer>> categoryId,
+                                         @RequestParam Optional<Integer> offset) {
         try {
-            String url = "https://productsapi-954ed826b909.herokuapp.com/get-products";
-            if (limit != null) {
-                url += "?limit=" + limit;
-            }
+            StringBuilder urlBuilder = new StringBuilder(PRODUCTS_API_URL+"/get-products?");
+
+            urlBuilder.append("limit=").append(limit);
+
+            title.ifPresent(titleTemp -> urlBuilder.append("&title=").append(titleTemp));
+
+            categoryId.ifPresent(ids -> {
+                ids.forEach(id -> urlBuilder.append("&categoryId=").append(id));
+            });
+
+            offset.ifPresent(offsetTemp -> urlBuilder.append("&offset=").append(offsetTemp));
+
             ResponseEntity<List<Product>> response = restTemplate.exchange(
+                    urlBuilder.toString(),
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<>() {}
+            );
+            return ResponseEntity.ok(response.getBody());
+        } catch (Exception e) {
+            log.error(e.toString());
+            return ResponseEntity.badRequest().body("Error while retrieving products.");
+        }
+    }
+
+
+    @GetMapping("/get-product-owner-wallet-by-product-id/{productId}")
+    public ResponseEntity<?> getProductOwnerWalletByProductId(@PathVariable int productId) {
+        try {
+            String url = ACCOUNTS_API_URL+"/get-product-owner-wallet-by-product-id/"+productId;
+            ResponseEntity<User> response = restTemplate.exchange(
                     url,
                     HttpMethod.GET,
                     null,
@@ -104,7 +142,8 @@ public class ProductsController {
             );
             return ResponseEntity.ok(response.getBody());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error while retrieving products.");
+            log.error(e.toString());
+            return ResponseEntity.badRequest().body("Error while getting owner's wallet.");
         }
     }
 }

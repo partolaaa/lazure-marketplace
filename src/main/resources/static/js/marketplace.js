@@ -6,6 +6,11 @@ document.getElementById("close-search-config").addEventListener("click", functio
     document.getElementById('search-config').classList.remove('open-search-config');
 });
 
+document.getElementById('search-input').addEventListener('input', function(event) {
+    console.log(event.target.value);
+    loadListings(20, true, event.target.value);
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     fetch('api/products/category')
         .then(response => {
@@ -103,11 +108,31 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-function loadListings(limit= 20, isClearContainer) {
+function loadListings(limit= 20,
+                      isClearContainer,
+                      title,
+                      categoryIds) {
     const loader = document.querySelector('.loader');
     const container = document.querySelector('.main-products-container');
 
-    return fetch(`api/products/get-products?limit=${limit}`)
+    let parameters = `limit=${limit}`;
+
+    if (title) {
+        parameters += `&title=${title}`;
+    }
+
+    if (categoryIds) {
+        for (let i = 0; i < categoryIds.length; i++) {
+            parameters += `&categoryId=${categoryIds[i]}`;
+        }
+    }
+
+    let allDisplayedProducts = container.querySelectorAll('.product').length;
+    if (!isClearContainer && allDisplayedProducts > 0) {
+        parameters += `&offset=${container.querySelectorAll('.product').length}`;
+    }
+
+    return fetch(`api/products/get-products?${parameters}`)
         .then(response => response.json())
         .then(data => {
             if (isClearContainer) {
@@ -115,33 +140,7 @@ function loadListings(limit= 20, isClearContainer) {
             }
             const fragment = document.createDocumentFragment();
             data.forEach(product => {
-                let productDiv = createProductElement(product);
-                productDiv.addEventListener("click", function () {
-                    document.getElementById("popup-product-id").textContent = product.name;
-                    document.getElementById("overlay").style.display = 'block';
-                    document.getElementById("popup").style.display = 'block';
-
-                    document.getElementById("popup-product-image").src = productDiv.querySelector('img').src;
-                    document.getElementById("popup-product-description").textContent = product.description;
-                    document.getElementById("popup-product-price").textContent = product.price;
-                    document.getElementById("product-status-text").innerText = "This product is on sale now";
-
-                    let button = document.getElementById("popup-buy-button");
-                    if (walletManager.wallet) {
-                        document.getElementById("popup-buy-button-tooltiptext").style.display = "none";
-                        button.classList.remove("button-disabled");
-                        button.removeAttribute('title');
-                        document.getElementById("popup-buy-button").onclick = function () {
-                            let buyLoader = document.getElementById("buy-loader");
-                            buyLoader.style.display = "block";
-                            walletManager.transferSol("HMg6tQYMpigM5656hK4XF5e6aAYDGyBmXqRJfDfYsNhq", product.price).then(r => buyLoader.style.display = "none");
-                        };
-                    } else {
-                        button.classList.add("button-disabled");
-                        document.getElementById("popup-buy-button-tooltiptext").style.display = "block";
-                    }
-                });
-                fragment.appendChild(productDiv);
+                fragment.appendChild(createProductInfoPopup(product));
             });
             container.appendChild(fragment);
         })

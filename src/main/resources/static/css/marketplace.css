@@ -34,6 +34,14 @@ body {
     filter: var(--filter-white-shadow);
 }
 
+#search-button:hover {
+    filter: none;
+}
+
+#search-button {
+    cursor: context-menu;
+}
+
 .search-box input[type = "text"] {
     margin: 0;
     height: 1rem;

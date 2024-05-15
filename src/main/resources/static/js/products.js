@@ -39,3 +39,55 @@ function createProductElement(product) {
 
     return productDiv;
 }
+
+async function getProductOwnerWalletByProductId(productId) {
+    let walletID;
+
+    try {
+        const response = await fetch("api/products/get-product-owner-wallet-by-product-id/" + productId, {
+            method: 'GET',
+        });
+
+        if (!response.ok) {
+            throw new Error("Couldn't get owner's wallet address: " + response.statusText);
+        }
+
+        const user = await response.json();
+        walletID = user.walletId;
+    } catch (error) {
+        createToast("warning", error);
+    }
+
+    return walletID;
+}
+
+function createProductInfoPopup(product) {
+    let productDiv = createProductElement(product);
+    productDiv.addEventListener("click", function () {
+        document.getElementById("popup-product-id").textContent = product.name;
+        document.getElementById("overlay").style.display = 'block';
+        document.getElementById("popup").style.display = 'block';
+
+        document.getElementById("popup-product-image").src = productDiv.querySelector('img').src;
+        document.getElementById("popup-product-description").textContent = product.description;
+        document.getElementById("popup-product-price").textContent = product.price;
+        document.getElementById("product-status-text").innerText = "This product is on sale now";
+
+        let button = document.getElementById("popup-buy-button");
+        if (walletManager.wallet) {
+            document.getElementById("popup-buy-button-tooltiptext").style.display = "none";
+            button.classList.remove("button-disabled");
+            button.removeAttribute('title');
+            document.getElementById("popup-buy-button").onclick = function () {
+                let buyLoader = document.getElementById("buy-loader");
+                buyLoader.style.display = "block";
+                handleTransferSol(product, buyLoader).then(r => buyLoader.style.display = "none");
+            };
+        } else {
+            button.classList.add("button-disabled");
+            document.getElementById("popup-buy-button-tooltiptext").style.display = "block";
+        }
+    });
+
+    return productDiv;
+}

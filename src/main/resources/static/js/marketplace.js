@@ -7,8 +7,12 @@ document.getElementById("close-search-config").addEventListener("click", functio
 });
 
 document.getElementById('search-input').addEventListener('input', function(event) {
-    console.log(event.target.value);
-    loadListings(20, true, event.target.value);
+    console.log(`value: ${event.target.value}`);
+    if (!(event.target.value === "")) {
+        loadListings(true, event.target.value);
+    } else {
+        loadListings(true);
+    }
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -83,7 +87,7 @@ document.getElementById('search-config-form').addEventListener('submit', functio
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    loadListings(40,true);
+    loadListings(true);
 
     const container = document.querySelector('.main-products-container');
 
@@ -101,17 +105,18 @@ document.addEventListener('DOMContentLoaded', function () {
         lastScrollTop = currentScrollTop;
     });
 
-    function loadMoreProducts(limit= 20) {
-        loadListings(limit, false).finally(() => {
+    function loadMoreProducts() {
+        loadListings(false).finally(() => {
             isLoading = false;
         });
     }
 });
 
-function loadListings(limit= 20,
-                      isClearContainer,
+function loadListings(isClearContainer,
                       title,
                       categoryIds) {
+
+    let limit = 40;
     const loader = document.querySelector('.loader');
     const container = document.querySelector('.main-products-container');
 

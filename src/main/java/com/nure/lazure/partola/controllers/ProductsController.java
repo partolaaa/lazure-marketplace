@@ -99,7 +99,7 @@ public class ProductsController {
 
 
     @GetMapping("/get-products")
-    public ResponseEntity<?> getProducts(@RequestParam(defaultValue = "20") int limit,
+    public ResponseEntity<?> getProducts(@RequestParam(defaultValue = "40") int limit,
                                          @RequestParam Optional<String> title,
                                          @RequestParam Optional<List<Integer>> categoryId,
                                          @RequestParam Optional<Integer> offset) {

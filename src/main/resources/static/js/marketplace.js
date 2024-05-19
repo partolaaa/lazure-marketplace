@@ -7,7 +7,6 @@ document.getElementById("close-search-config").addEventListener("click", functio
 });
 
 document.getElementById('search-input').addEventListener('input', function(event) {
-    console.log(`value: ${event.target.value}`);
     if (!(event.target.value === "")) {
         loadListings(true, event.target.value);
     } else {
@@ -36,6 +35,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 checkbox.className = "search-config-property";
                 checkbox.name = "selectedCategory";
                 checkbox.value = category.category_id;
+                checkbox.onclick = function () {
+                    loadListings(true, document.getElementById('search-input').value);
+                }
                 document.getElementById('search-form-checkboxes').appendChild(checkbox);
 
 
@@ -57,32 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Failed to fetch categories:', error);
-        });
-});
-
-document.getElementById('search-config-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    let form = event.target;
-
-    let url = new URL(form.action);
-    let params = new URLSearchParams(new FormData(form));
-
-    url.search = params.toString();
-
-    fetch(url, {
-        method: 'GET',
-    })
-        .then(response => {
-            if (!response.ok) {
-                return response.text().then(text => Promise.reject(text));
-            }
-            return response.text();
-        })
-        .then(text => {
-            createToast("success", text);
-        })
-        .catch(error => {
-            createToast("warning", error);
         });
 });
 
@@ -113,8 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function loadListings(isClearContainer,
-                      title,
-                      categoryIds) {
+                      title) {
 
     let limit = 40;
     const loader = document.querySelector('.loader');
@@ -125,6 +100,11 @@ function loadListings(isClearContainer,
     if (title) {
         parameters += `&title=${title}`;
     }
+
+    let categoryCheckboxes= document.querySelectorAll('#search-form-checkboxes .search-config-property');
+    let categoryIds = Array.from(categoryCheckboxes)
+        .filter(checkbox => checkbox.checked)
+        .map(checkbox => checkbox.value);
 
     if (categoryIds) {
         for (let i = 0; i < categoryIds.length; i++) {

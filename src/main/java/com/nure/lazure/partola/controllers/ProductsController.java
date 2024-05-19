@@ -90,14 +90,6 @@ public class ProductsController {
         }
     }
 
-    @GetMapping("/search-config")
-    public ResponseEntity<?> handleSearchConfig(@RequestParam List<Integer> selectedCategory) {
-        //System.out.println(selectedCategory);
-
-        return ResponseEntity.ok("Search configured successfully!");
-    }
-
-
     @GetMapping("/get-products")
     public ResponseEntity<?> getProducts(@RequestParam(defaultValue = "40") int limit,
                                          @RequestParam Optional<String> title,
@@ -115,7 +107,7 @@ public class ProductsController {
             });
 
             offset.ifPresent(offsetTemp -> urlBuilder.append("&offset=").append(offsetTemp));
-
+            System.out.println(urlBuilder);
             ResponseEntity<List<Product>> response = restTemplate.exchange(
                     urlBuilder.toString(),
                     HttpMethod.GET,

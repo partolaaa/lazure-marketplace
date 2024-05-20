@@ -102,7 +102,7 @@ public class ProductsController {
 
             title.ifPresent(titleTemp -> urlBuilder.append("&title=").append(titleTemp));
 
-            categoryId.ifPresent(ids -> ids.forEach(id -> urlBuilder.append("&categoryId=").append(id)));
+            categoryId.ifPresent(ids -> ids.forEach(id -> urlBuilder.append("&category_id=").append(id)));
 
             offset.ifPresent(offsetTemp -> urlBuilder.append("&offset=").append(offsetTemp));
             ResponseEntity<List<Product>> response = restTemplate.exchange(

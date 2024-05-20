@@ -170,7 +170,9 @@ ion-icon {
 }
 
 .header-solana-net-info {
-    margin: 7px 0 0 0;
     filter: var(--filter-white-shadow);
     color: white;
+    display: flex;
+    align-items: center;
+    margin: 0;
 }

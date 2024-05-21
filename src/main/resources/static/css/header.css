@@ -161,8 +161,12 @@ ion-icon {
     background-color: transparent;
 }
 
+#menu {
+    border-radius: 5px;
+}
+
 #menu:hover {
-    filter: var(--filter-white-shadow);
+    background-color: var(--secondary-color);
 }
 
 #logo:hover {

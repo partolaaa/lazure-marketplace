@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 /**
  * @author Ivan Partola
  */
@@ -16,7 +18,7 @@ public class Product {
     private Integer productId;
     private String name;
     private String description;
-    private Double price;
+    private BigDecimal price;
 
     @JsonProperty("resource_link")
     private String resourceLink;

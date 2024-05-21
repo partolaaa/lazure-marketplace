@@ -15,7 +15,7 @@ document.getElementById('search-input').addEventListener('input', function(event
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('api/products/category')
+    fetch('api/categories')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok: ' + response.statusText);

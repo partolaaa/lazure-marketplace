@@ -44,7 +44,7 @@ async function getProductOwnerWalletByProductId(productId) {
     let walletID;
 
     try {
-        const response = await fetch("api/products/get-product-owner-wallet-by-product-id/" + productId, {
+        const response = await fetch("api/users/get-product-owner-wallet-by-product-id/" + productId, {
             method: 'GET',
         });
 

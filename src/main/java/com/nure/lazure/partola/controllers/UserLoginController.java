@@ -1,56 +1,29 @@
 package com.nure.lazure.partola.controllers;
 
 import com.nure.lazure.partola.models.User;
+import com.nure.lazure.partola.services.UserLoginService;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.Objects;
 
 /**
  * @author Ivan Partola
  */
 @RestController
 @RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class UserLoginController {
-    private final RestTemplate restTemplate;
-
-    @Autowired
-    public UserLoginController(RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder.build();
-    }
+    private final UserLoginService userLoginService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user, HttpSession session) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + System.getenv("PASSWORD"));
-        HttpEntity<User> request = new HttpEntity<>(user, headers);
-
-        ResponseEntity<String> response = restTemplate.exchange(
-                "https://accountsapi-3a5f92f4b3d5.herokuapp.com/users/login",
-                HttpMethod.POST,
-                request,
-                String.class
-        );
-
-        HttpHeaders responseHeaders = response.getHeaders();
-        String jwtToken = Objects.requireNonNull(responseHeaders.getFirst(HttpHeaders.AUTHORIZATION)).replace("Bearer ", "");
-        session.setAttribute("jwtToken", jwtToken);
-
-        headers = new HttpHeaders();
-        headers.set(HttpHeaders.AUTHORIZATION, jwtToken);
-        return ResponseEntity.ok().headers(headers).body("Wallet was successfully connected!");
+    public String login(@RequestBody User user, HttpSession session) {
+        return userLoginService.login(user, session);
     }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpSession session) {
-        session.removeAttribute("jwtToken");
+        userLoginService.logout(session);
         return ResponseEntity.ok("Wallet was successfully disconnected!");
     }
 }

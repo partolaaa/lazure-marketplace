@@ -9,7 +9,7 @@ body {
     max-height: 80vh;
     overflow-y: auto;
     padding-right: 15px;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 0fr));
 }
 
 .product {

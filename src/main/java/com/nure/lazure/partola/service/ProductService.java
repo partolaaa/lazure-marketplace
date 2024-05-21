@@ -6,6 +6,7 @@ import com.nure.lazure.partola.model.Product;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -18,6 +19,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Optional;
 
+import static java.lang.String.format;
+
 /**
  * @author Ivan Partola
  */
@@ -25,7 +28,9 @@ import java.util.Optional;
 @Slf4j
 public class ProductService {
     private final RestTemplate restTemplate;
-    private final String PRODUCTS_API_URL = "https://productsapi-954ed826b909.herokuapp.com";
+    @Value("${products.api.url}")
+    private String PRODUCTS_API_URL;
+    private final String BEARER_PREFIX = "Bearer ";
     @Autowired
     public ProductService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
@@ -34,11 +39,11 @@ public class ProductService {
         try {
             String jwtToken = session.getAttribute("jwtToken").toString();
             HttpHeaders headers = new HttpHeaders();
-            headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken);
+            headers.set(HttpHeaders.AUTHORIZATION, format("%s%s", BEARER_PREFIX, jwtToken));
             HttpEntity<Product> request = new HttpEntity<>(product, headers);
 
             restTemplate.exchange(
-                    PRODUCTS_API_URL+"/product",
+                    format("%s/product", PRODUCTS_API_URL),
                     HttpMethod.POST,
                     request,
                     String.class
@@ -51,7 +56,7 @@ public class ProductService {
 
     public List<Product> getAllProductsByWallet(String wallet) {
         try {
-            String url = PRODUCTS_API_URL+"/wallet/" + wallet;
+            String url = format("%s/wallet/%s", PRODUCTS_API_URL, wallet);
             ResponseEntity<List<Product>> response = restTemplate.exchange(
                     url,
                     HttpMethod.GET,
@@ -70,7 +75,7 @@ public class ProductService {
                                      Optional<List<Integer>> categoryId,
                                      Optional<Integer> offset) {
         try {
-            StringBuilder urlBuilder = new StringBuilder(PRODUCTS_API_URL+"/get-products?");
+            StringBuilder urlBuilder = new StringBuilder(format("%s/get-products?", PRODUCTS_API_URL));
 
             urlBuilder.append("limit=").append(limit);
 

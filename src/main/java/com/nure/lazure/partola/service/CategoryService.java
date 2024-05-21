@@ -1,7 +1,7 @@
-package com.nure.lazure.partola.services;
+package com.nure.lazure.partola.service;
 
-import com.nure.lazure.partola.exceptions.DataNotRetrievedException;
-import com.nure.lazure.partola.models.Category;
+import com.nure.lazure.partola.exception.DataNotRetrievedException;
+import com.nure.lazure.partola.model.Category;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -18,11 +18,11 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class CategoriesService {
+public class CategoryService {
     private final RestTemplate restTemplate;
 
     @Autowired
-    public CategoriesService(RestTemplateBuilder restTemplateBuilder) {
+    public CategoryService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
 

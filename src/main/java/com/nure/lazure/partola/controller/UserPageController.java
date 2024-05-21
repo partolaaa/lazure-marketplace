@@ -1,6 +1,6 @@
-package com.nure.lazure.partola.controllers;
+package com.nure.lazure.partola.controller;
 
-import com.nure.lazure.partola.models.Product;
+import com.nure.lazure.partola.model.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
  */
 @Controller
 @RequiredArgsConstructor
-public class UserPagesController {
-    @GetMapping({"", "/"})
+public class UserPageController {
+    @GetMapping
     public String mainPage() {
         return "global/marketplace";
     }

@@ -1,7 +1,7 @@
-package com.nure.lazure.partola.controllers;
+package com.nure.lazure.partola.controller;
 
-import com.nure.lazure.partola.models.Category;
-import com.nure.lazure.partola.services.CategoriesService;
+import com.nure.lazure.partola.model.Category;
+import com.nure.lazure.partola.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,10 +15,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
-public class CategoriesController {
-    private final CategoriesService categoriesService;
-    @GetMapping("")
+public class CategoryController {
+    private final CategoryService categoryService;
+    @GetMapping
     public List<Category> getCategories() {
-        return categoriesService.getCategories();
+        return categoryService.getCategories();
     }
 }

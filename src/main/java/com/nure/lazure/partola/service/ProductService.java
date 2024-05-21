@@ -1,8 +1,8 @@
-package com.nure.lazure.partola.services;
+package com.nure.lazure.partola.service;
 
-import com.nure.lazure.partola.exceptions.DataNotRetrievedException;
-import com.nure.lazure.partola.exceptions.ProductNotAddedException;
-import com.nure.lazure.partola.models.Product;
+import com.nure.lazure.partola.exception.DataNotRetrievedException;
+import com.nure.lazure.partola.exception.ProductNotAddedException;
+import com.nure.lazure.partola.model.Product;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +23,11 @@ import java.util.Optional;
  */
 @Service
 @Slf4j
-public class ProductsService {
+public class ProductService {
     private final RestTemplate restTemplate;
     private final String PRODUCTS_API_URL = "https://productsapi-954ed826b909.herokuapp.com";
     @Autowired
-    public ProductsService(RestTemplateBuilder restTemplateBuilder) {
+    public ProductService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
     public void add(Product product, HttpSession session) {

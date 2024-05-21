@@ -1,7 +1,7 @@
-package com.nure.lazure.partola.services;
+package com.nure.lazure.partola.service;
 
-import com.nure.lazure.partola.exceptions.DataNotRetrievedException;
-import com.nure.lazure.partola.models.User;
+import com.nure.lazure.partola.exception.DataNotRetrievedException;
+import com.nure.lazure.partola.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -16,10 +16,10 @@ import org.springframework.web.client.RestTemplate;
  */
 @Service
 @Slf4j
-public class UsersService {
+public class UserService {
     private final RestTemplate restTemplate;
     @Autowired
-    public UsersService(RestTemplateBuilder restTemplateBuilder) {
+    public UserService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
     public User getProductOwnerWalletByProductId(int productId) {

@@ -1,7 +1,7 @@
-package com.nure.lazure.partola.controllers;
+package com.nure.lazure.partola.controller;
 
-import com.nure.lazure.partola.models.Product;
-import com.nure.lazure.partola.services.ProductsService;
+import com.nure.lazure.partola.model.Product;
+import com.nure.lazure.partola.service.ProductService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,16 +15,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("/api/products")
 @RestController
-public class ProductsController {
-    private final ProductsService productsService;
-    @PostMapping("")
+public class ProductController {
+    private final ProductService productService;
+    @PostMapping
     public void add(@ModelAttribute Product product, HttpSession session) {
-        productsService.add(product, session);
+        productService.add(product, session);
     }
 
     @GetMapping("/wallet/{wallet}")
     public List<Product> getAllProductsByWallet(@PathVariable String wallet) {
-        return productsService.getAllProductsByWallet(wallet);
+        return productService.getAllProductsByWallet(wallet);
     }
 
     @GetMapping("/get-products")
@@ -32,6 +32,6 @@ public class ProductsController {
                                          @RequestParam Optional<String> title,
                                          @RequestParam Optional<List<Integer>> categoryId,
                                          @RequestParam Optional<Integer> offset) {
-        return productsService.getProducts(limit, title, categoryId, offset);
+        return productService.getProducts(limit, title, categoryId, offset);
     }
 }

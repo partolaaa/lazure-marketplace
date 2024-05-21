@@ -1,6 +1,6 @@
-package com.nure.lazure.partola.services;
+package com.nure.lazure.partola.service;
 
-import com.nure.lazure.partola.models.User;
+import com.nure.lazure.partola.model.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class UserLoginService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public String login(User user, HttpSession session) {
+    public void login(User user, HttpSession session) {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + System.getenv("PASSWORD"));
         HttpEntity<User> request = new HttpEntity<>(user, headers);
@@ -42,8 +42,6 @@ public class UserLoginService {
         HttpHeaders responseHeaders = response.getHeaders();
         String jwtToken = Objects.requireNonNull(responseHeaders.getFirst(HttpHeaders.AUTHORIZATION)).replace("Bearer ", "");
         session.setAttribute("jwtToken", jwtToken);
-
-        return "Wallet was connected successfully.";
     }
 
     public void logout(HttpSession session) {

@@ -1,6 +1,6 @@
-package com.nure.lazure.partola.controllers;
+package com.nure.lazure.partola.controller;
 
-import com.nure.lazure.partola.services.CustomErrorService;
+import com.nure.lazure.partola.service.CustomErrorService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.error.ErrorController;

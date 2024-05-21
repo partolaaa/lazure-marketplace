@@ -1,4 +1,4 @@
-package com.nure.lazure.partola.models;
+package com.nure.lazure.partola.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

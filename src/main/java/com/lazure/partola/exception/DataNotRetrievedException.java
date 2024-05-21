@@ -1,4 +1,4 @@
-package com.nure.lazure.partola.exception;
+package com.lazure.partola.exception;
 
 /**
  * @author Ivan Partola

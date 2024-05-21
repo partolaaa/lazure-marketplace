@@ -1,4 +1,4 @@
-package com.nure.lazure.partola.service;
+package com.lazure.partola.service;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,7 +1,7 @@
-package com.nure.lazure.partola.service;
+package com.lazure.partola.service;
 
-import com.nure.lazure.partola.exception.DataNotRetrievedException;
-import com.nure.lazure.partola.model.User;
+import com.lazure.partola.exception.DataNotRetrievedException;
+import com.lazure.partola.model.Category;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 import static java.lang.String.format;
 
 /**
@@ -19,18 +21,20 @@ import static java.lang.String.format;
  */
 @Service
 @Slf4j
-public class UserService {
+public class CategoryService {
     private final RestTemplate restTemplate;
-    @Value("${accounts.api.url}")
-    private String ACCOUNTS_API_URL;
+    @Value("${products.api.url}")
+    private String PRODUCTS_API_URL;
+
     @Autowired
-    public UserService(RestTemplateBuilder restTemplateBuilder) {
+    public CategoryService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
-    public User getProductOwnerWalletByProductId(int productId) {
+
+    public List<Category> getCategories() {
         try {
-            String url = format("%s/get-product-owner-wallet-by-product-id/%s", ACCOUNTS_API_URL, productId);
-            ResponseEntity<User> response = restTemplate.exchange(
+            String url = format("%s/category", PRODUCTS_API_URL);
+            ResponseEntity<List<Category>> response = restTemplate.exchange(
                     url,
                     HttpMethod.GET,
                     null,
@@ -39,7 +43,7 @@ public class UserService {
             return response.getBody();
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new DataNotRetrievedException("Error while getting owner's wallet.");
+            throw new DataNotRetrievedException("Error while retrieving categories.");
         }
     }
 }

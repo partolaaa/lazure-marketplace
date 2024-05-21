@@ -1,7 +1,7 @@
-package com.nure.lazure.partola.controller;
+package com.lazure.partola.controller;
 
-import com.nure.lazure.partola.model.Product;
-import com.nure.lazure.partola.service.ProductService;
+import com.lazure.partola.model.Product;
+import com.lazure.partola.service.ProductService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

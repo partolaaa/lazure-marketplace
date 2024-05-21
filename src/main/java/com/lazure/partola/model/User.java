@@ -1,4 +1,4 @@
-package com.nure.lazure.partola.model;
+package com.lazure.partola.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

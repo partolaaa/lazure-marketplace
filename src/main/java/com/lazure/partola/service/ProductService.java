@@ -1,8 +1,8 @@
-package com.nure.lazure.partola.service;
+package com.lazure.partola.service;
 
-import com.nure.lazure.partola.exception.DataNotRetrievedException;
-import com.nure.lazure.partola.exception.ProductNotAddedException;
-import com.nure.lazure.partola.model.Product;
+import com.lazure.partola.exception.DataNotRetrievedException;
+import com.lazure.partola.exception.ProductNotAddedException;
+import com.lazure.partola.model.Product;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

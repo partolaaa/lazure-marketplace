@@ -1,7 +1,7 @@
-package com.nure.lazure.partola.controller;
+package com.lazure.partola.controller;
 
-import com.nure.lazure.partola.model.User;
-import com.nure.lazure.partola.service.UserLoginService;
+import com.lazure.partola.model.User;
+import com.lazure.partola.service.UserLoginService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

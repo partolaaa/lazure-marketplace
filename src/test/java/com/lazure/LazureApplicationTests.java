@@ -1,4 +1,4 @@
-package com.nure.lazure;
+package com.lazure;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

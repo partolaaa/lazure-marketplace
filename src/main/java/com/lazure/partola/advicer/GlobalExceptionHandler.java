@@ -1,7 +1,7 @@
-package com.nure.lazure.partola.advicer;
+package com.lazure.partola.advicer;
 
-import com.nure.lazure.partola.exception.DataNotRetrievedException;
-import com.nure.lazure.partola.exception.ProductNotAddedException;
+import com.lazure.partola.exception.DataNotRetrievedException;
+import com.lazure.partola.exception.ProductNotAddedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

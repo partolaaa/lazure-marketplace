@@ -1,7 +1,7 @@
-package com.nure.lazure.partola.service;
+package com.lazure.partola.service;
 
-import com.nure.lazure.partola.exception.DataNotRetrievedException;
-import com.nure.lazure.partola.model.Category;
+import com.lazure.partola.exception.DataNotRetrievedException;
+import com.lazure.partola.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-
 import static java.lang.String.format;
 
 /**
@@ -21,20 +19,18 @@ import static java.lang.String.format;
  */
 @Service
 @Slf4j
-public class CategoryService {
+public class UserService {
     private final RestTemplate restTemplate;
-    @Value("${products.api.url}")
-    private String PRODUCTS_API_URL;
-
+    @Value("${accounts.api.url}")
+    private String ACCOUNTS_API_URL;
     @Autowired
-    public CategoryService(RestTemplateBuilder restTemplateBuilder) {
+    public UserService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
-
-    public List<Category> getCategories() {
+    public User getProductOwnerWalletByProductId(int productId) {
         try {
-            String url = format("%s/category", PRODUCTS_API_URL);
-            ResponseEntity<List<Category>> response = restTemplate.exchange(
+            String url = format("%s/get-product-owner-wallet-by-product-id/%s", ACCOUNTS_API_URL, productId);
+            ResponseEntity<User> response = restTemplate.exchange(
                     url,
                     HttpMethod.GET,
                     null,
@@ -43,7 +39,7 @@ public class CategoryService {
             return response.getBody();
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new DataNotRetrievedException("Error while retrieving categories.");
+            throw new DataNotRetrievedException("Error while getting owner's wallet.");
         }
     }
 }

@@ -1,7 +1,7 @@
-package com.nure.lazure.partola.controller;
+package com.lazure.partola.controller;
 
-import com.nure.lazure.partola.model.Category;
-import com.nure.lazure.partola.service.CategoryService;
+import com.lazure.partola.model.Category;
+import com.lazure.partola.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

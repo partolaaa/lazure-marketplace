@@ -1,4 +1,4 @@
-package com.nure.lazure;
+package com.lazure;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

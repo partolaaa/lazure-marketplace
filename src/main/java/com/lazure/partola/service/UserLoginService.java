@@ -1,6 +1,6 @@
-package com.nure.lazure.partola.service;
+package com.lazure.partola.service;
 
-import com.nure.lazure.partola.model.User;
+import com.lazure.partola.model.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

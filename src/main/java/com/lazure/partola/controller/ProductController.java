@@ -1,13 +1,19 @@
 package com.lazure.partola.controller;
 
-import com.lazure.partola.model.Product;
+import com.lazure.partola.model.dto.ProductDto;
+import com.lazure.partola.model.criteria.ProductCriteria;
 import com.lazure.partola.service.ProductService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Ivan Partola
@@ -18,20 +24,19 @@ import java.util.Optional;
 public class ProductController {
     private final ProductService productService;
     @PostMapping
-    public void add(@ModelAttribute Product product, HttpSession session) {
-        productService.add(product, session);
+    public void add(@ModelAttribute ProductDto productDto, HttpSession session) {
+        productService.add(productDto, session);
     }
 
     @GetMapping("/wallet/{wallet}")
-    public List<Product> getAllProductsByWallet(@PathVariable String wallet) {
+    public List<ProductDto> getAllProductsByWallet(@PathVariable String wallet) {
         return productService.getAllProductsByWallet(wallet);
     }
 
-    @GetMapping("/get-products")
-    public List<Product> getProducts(@RequestParam(defaultValue = "40") int limit,
-                                         @RequestParam Optional<String> title,
-                                         @RequestParam Optional<List<Integer>> categoryId,
-                                         @RequestParam Optional<Integer> offset) {
-        return productService.getProducts(limit, title, categoryId, offset);
+    @GetMapping
+    public List<ProductDto> getProducts(@RequestParam(defaultValue = "40") int limit,
+                                        @RequestParam(defaultValue = "0") int offset,
+                                        ProductCriteria productCriteria) {
+        return productService.getProducts(limit, offset, productCriteria);
     }
 }

@@ -117,7 +117,7 @@ function loadListings(isClearContainer,
         parameters += `&offset=${container.querySelectorAll('.product').length}`;
     }
 
-    return fetch(`api/products/get-products?${parameters}`)
+    return fetch(`api/products?${parameters}`)
         .then(response => response.json())
         .then(data => {
             if (isClearContainer) {

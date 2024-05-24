@@ -1,6 +1,6 @@
 package com.lazure.partola.controller;
 
-import com.lazure.partola.model.User;
+import com.lazure.partola.model.dto.UserDto;
 import com.lazure.partola.service.UserLoginService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +16,8 @@ public class UserLoginController {
     private final UserLoginService userLoginService;
 
     @PostMapping("/login")
-    public void login(@RequestBody User user, HttpSession session) {
-        userLoginService.login(user, session);
+    public void login(@RequestBody UserDto userDto, HttpSession session) {
+        userLoginService.login(userDto, session);
     }
 
     @PostMapping("/logout")

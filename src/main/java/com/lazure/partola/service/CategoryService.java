@@ -1,7 +1,7 @@
 package com.lazure.partola.service;
 
 import com.lazure.partola.exception.DataNotRetrievedException;
-import com.lazure.partola.model.Category;
+import com.lazure.partola.model.dto.CategoryDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,10 +31,10 @@ public class CategoryService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public List<Category> getCategories() {
+    public List<CategoryDto> getCategories() {
         try {
             String url = format("%s/category", PRODUCTS_API_URL);
-            ResponseEntity<List<Category>> response = restTemplate.exchange(
+            ResponseEntity<List<CategoryDto>> response = restTemplate.exchange(
                     url,
                     HttpMethod.GET,
                     null,

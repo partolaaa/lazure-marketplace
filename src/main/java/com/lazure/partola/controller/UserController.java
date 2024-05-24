@@ -1,6 +1,6 @@
 package com.lazure.partola.controller;
 
-import com.lazure.partola.model.User;
+import com.lazure.partola.model.dto.UserDto;
 import com.lazure.partola.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
     @GetMapping("/get-product-owner-wallet-by-product-id/{productId}")
-    public User getProductOwnerWalletByProductId(@PathVariable int productId) {
+    public UserDto getProductOwnerWalletByProductId(@PathVariable int productId) {
         return userService.getProductOwnerWalletByProductId(productId);
     }
 }

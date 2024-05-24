@@ -1,6 +1,6 @@
 package com.lazure.partola.service;
 
-import com.lazure.partola.model.User;
+import com.lazure.partola.model.dto.UserDto;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +35,10 @@ public class UserLoginService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public void login(User user, HttpSession session) {
+    public void login(UserDto userDto, HttpSession session) {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.AUTHORIZATION, format("%s%s", BEARER_PREFIX, ACCOUNTS_API_PASSWORD));
-        HttpEntity<User> request = new HttpEntity<>(user, headers);
+        HttpEntity<UserDto> request = new HttpEntity<>(userDto, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
                 format("%s/login", ACCOUNTS_API_URI),

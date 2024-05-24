@@ -1,6 +1,6 @@
 package com.lazure.partola.controller;
 
-import com.lazure.partola.model.Product;
+import com.lazure.partola.model.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +26,7 @@ public class UserPageController {
 
     @GetMapping("/my-listings")
     public String listings(Model model) {
-        model.addAttribute("product", new Product());
+        model.addAttribute("product", new ProductDto());
         return "user/listings";
     }
 }

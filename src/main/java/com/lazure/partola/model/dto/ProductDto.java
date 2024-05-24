@@ -1,5 +1,6 @@
-package com.lazure.partola.model;
+package com.lazure.partola.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,16 +14,15 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Product {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class ProductDto {
     @JsonProperty("product_id")
     private Integer productId;
     private String name;
     private String description;
     private BigDecimal price;
-
     @JsonProperty("resource_link")
     private String resourceLink;
-
     @JsonProperty("category_id")
     private Integer categoryId;
 }

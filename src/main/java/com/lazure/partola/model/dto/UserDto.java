@@ -1,4 +1,4 @@
-package com.lazure.partola.model;
+package com.lazure.partola.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class User {
+public class UserDto {
     private String walletId;
 }

@@ -1,6 +1,6 @@
 package com.lazure.partola.controller;
 
-import com.lazure.partola.model.Category;
+import com.lazure.partola.model.dto.CategoryDto;
 import com.lazure.partola.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +18,7 @@ import java.util.List;
 public class CategoryController {
     private final CategoryService categoryService;
     @GetMapping
-    public List<Category> getCategories() {
+    public List<CategoryDto> getCategories() {
         return categoryService.getCategories();
     }
 }

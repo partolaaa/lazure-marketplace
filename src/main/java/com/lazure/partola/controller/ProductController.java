@@ -19,7 +19,7 @@ import java.util.List;
  * @author Ivan Partola
  */
 @RequiredArgsConstructor
-@RequestMapping("/api/products")
+@RequestMapping("/api/${products.api.url.path.products}")
 @RestController
 public class ProductController {
     private final ProductService productService;

@@ -26,9 +26,10 @@ public class UserLoginService {
     private final RestTemplate restTemplate;
     @Value("${accounts.api.url}")
     private String ACCOUNTS_API_URI;
+    @Value("${accounts.api.url.path.users}")
+    private String USERS_URL_PATH;
     @Value("${accounts.api.password}")
     private String ACCOUNTS_API_PASSWORD;
-    private final String BEARER_PREFIX = "Bearer ";
 
     @Autowired
     public UserLoginService(RestTemplateBuilder restTemplateBuilder) {
@@ -37,11 +38,11 @@ public class UserLoginService {
 
     public void login(UserDto userDto, HttpSession session) {
         HttpHeaders headers = new HttpHeaders();
+        String BEARER_PREFIX = "Bearer ";
         headers.set(HttpHeaders.AUTHORIZATION, format("%s%s", BEARER_PREFIX, ACCOUNTS_API_PASSWORD));
         HttpEntity<UserDto> request = new HttpEntity<>(userDto, headers);
-
         ResponseEntity<String> response = restTemplate.exchange(
-                format("%s/login", ACCOUNTS_API_URI),
+                format("%s/%s/login", ACCOUNTS_API_URI, USERS_URL_PATH),
                 HttpMethod.POST,
                 request,
                 String.class

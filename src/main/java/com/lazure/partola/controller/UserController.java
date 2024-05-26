@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Ivan Partola
  */
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/${accounts.api.url.path.users}")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;

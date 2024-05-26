@@ -26,6 +26,9 @@ public class CategoryService {
     @Value("${products.api.url}")
     private String PRODUCTS_API_URL;
 
+    @Value("${products.api.url.path.categories}")
+    private String CATEGORY_URL_PATH;
+
     @Autowired
     public CategoryService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
@@ -33,7 +36,7 @@ public class CategoryService {
 
     public List<CategoryDto> getCategories() {
         try {
-            String url = format("%s/category", PRODUCTS_API_URL);
+            String url = format("%s/%s", PRODUCTS_API_URL, CATEGORY_URL_PATH);
             ResponseEntity<List<CategoryDto>> response = restTemplate.exchange(
                     url,
                     HttpMethod.GET,

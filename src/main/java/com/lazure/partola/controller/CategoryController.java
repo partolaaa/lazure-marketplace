@@ -13,7 +13,7 @@ import java.util.List;
  * @author Ivan Partola
  */
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/api/${products.api.url.path.categories}")
 @RequiredArgsConstructor
 public class CategoryController {
     private final CategoryService categoryService;

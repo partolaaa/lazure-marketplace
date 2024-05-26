@@ -31,10 +31,9 @@ import static java.lang.String.format;
 @Slf4j
 public class ProductService {
     private final RestTemplate restTemplate;
+
     @Value("${products.api.url}")
     private String PRODUCTS_API_URL;
-    private final String BEARER_PREFIX = "Bearer ";
-
     @Autowired
     public ProductService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
@@ -44,18 +43,19 @@ public class ProductService {
         try {
             String jwtToken = session.getAttribute("jwtToken").toString();
             HttpHeaders headers = new HttpHeaders();
+            String BEARER_PREFIX = "Bearer ";
             headers.set(HttpHeaders.AUTHORIZATION, format("%s%s", BEARER_PREFIX, jwtToken));
             HttpEntity<ProductDto> request = new HttpEntity<>(productDto, headers);
 
             restTemplate.exchange(
-                    format("%s/productDto", PRODUCTS_API_URL),
+                    format("%s/product", PRODUCTS_API_URL),
                     HttpMethod.POST,
                     request,
                     String.class
             );
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new ProductNotAddedException("Error while adding a new productDto.");
+            throw new ProductNotAddedException("Error while adding a new product.");
         }
     }
 

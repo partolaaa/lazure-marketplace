@@ -29,8 +29,8 @@ document.getElementById("add-product").addEventListener('click', function() {
                     }
                     return response.text();
                 })
-                .then(text => {
-                    createToast("success", text);
+                .then(() => {
+                    createToast("success", "Product added successfully!");
                     getAllListingsByWallet();
                 })
                 .catch(error => {

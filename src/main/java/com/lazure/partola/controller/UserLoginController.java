@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Ivan Partola
  */
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/${accounts.api.url.path.users}")
 @RequiredArgsConstructor
 public class UserLoginController {
     private final UserLoginService userLoginService;

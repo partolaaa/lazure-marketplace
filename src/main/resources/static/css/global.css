@@ -10,6 +10,7 @@
     height: 100%;
     overflow: hidden;
     filter: blur(50px);
+    z-index: -1;
 }
 
 .circle {
@@ -47,6 +48,10 @@
     --toast-warning: #E9BD0C;
     --toast-info: #3498DB;
     --price-text-color: #F8F7F8;
+    --light-green: #92F7CB;
+    --light-green-background: rgba(146, 247, 203, 0.16);
+    --light-red: #f79292;
+    --light-red-background: rgba(247, 146, 146, 0.16);
     --filter-white-shadow: drop-shadow(0 0 0.2rem white);
 }
 body {

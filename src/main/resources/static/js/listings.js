@@ -46,7 +46,7 @@ document.getElementById("add-product").addEventListener('click', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('api/categories')
+    fetch('/api/categories')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok: ' + response.statusText);
@@ -134,7 +134,7 @@ function loadListings() {
 function getAllListingsByWallet() {
     const loader = document.querySelector('.loader');
     const container = document.querySelector('.main-products-container');
-    fetch('api/products/wallet/' + walletManager.getWalletString())
+    fetch('/api/products/wallet/' + walletManager.getWalletString())
         .then(response => response.json())
         .then(data => {
             loader.style.display = 'none';

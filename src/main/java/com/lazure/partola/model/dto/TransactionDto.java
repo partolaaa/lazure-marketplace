@@ -1,5 +1,6 @@
 package com.lazure.partola.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,12 +14,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TransactionDto {
-    private int transactionId;
-    private int sellerId;
-    private int buyerId;
+    private Long transactionId;
+    private Long sellerId;
+    private Long buyerId;
     @JsonProperty("dateTime")
     LocalDateTime createdTime;
-    private int productId;
+    private Long productId;
     private String txId;
 }

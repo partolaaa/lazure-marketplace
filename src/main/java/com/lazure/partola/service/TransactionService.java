@@ -2,6 +2,8 @@ package com.lazure.partola.service;
 
 import com.lazure.partola.exception.DataNotRetrievedException;
 import com.lazure.partola.exception.TransactionNotAddedException;
+import com.lazure.partola.mapper.TransactionMapper;
+import com.lazure.partola.model.dto.FullTransactionInfoDto;
 import com.lazure.partola.model.dto.TransactionDto;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +19,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Objects;
 
 import static java.lang.String.format;
 
@@ -32,15 +37,16 @@ public class TransactionService {
 
     @Value("${accounts.api.url.path.transactions}")
     private String TRANSACTIONS_URL_PATH;
-
+    private final TransactionMapper transactionMapper;
     private final RestTemplate restTemplate;
 
     @Autowired
-    public TransactionService(RestTemplateBuilder restTemplateBuilder) {
+    public TransactionService(TransactionMapper transactionMapper, RestTemplateBuilder restTemplateBuilder) {
+        this.transactionMapper = transactionMapper;
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public List<TransactionDto> getTransactionsByWalletId(String walletId) {
+    public List<FullTransactionInfoDto> getTransactionsByWalletId(String walletId) {
         try {
             URIBuilder uriBuilder = new URIBuilder(format("%s/%s", ACCOUNTS_API_URL, TRANSACTIONS_URL_PATH));
             uriBuilder.addParameter("walletId", walletId);
@@ -51,7 +57,8 @@ public class TransactionService {
                     new ParameterizedTypeReference<>() {
                     }
             );
-            return response.getBody();
+
+            return Objects.requireNonNull(response.getBody()).stream().map(transactionMapper::toFullTransactionInfoDto).toList();
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new DataNotRetrievedException("Error while retrieving transactions.");
@@ -60,12 +67,14 @@ public class TransactionService {
 
     public void add(TransactionDto transactionDto, HttpSession session) {
         try {
+            transactionDto.setCreatedTime(LocalDateTime.now(ZoneOffset.UTC));
+
             String jwtToken = session.getAttribute("jwtToken").toString();
             HttpHeaders headers = new HttpHeaders();
             String BEARER_PREFIX = "Bearer ";
             headers.set(HttpHeaders.AUTHORIZATION, format("%s%s", BEARER_PREFIX, jwtToken));
             HttpEntity<TransactionDto> request = new HttpEntity<>(transactionDto, headers);
-
+            System.out.println(request.getBody());
             restTemplate.exchange(
                     format("%s/%s", ACCOUNTS_API_URL, TRANSACTIONS_URL_PATH),
                     HttpMethod.POST,

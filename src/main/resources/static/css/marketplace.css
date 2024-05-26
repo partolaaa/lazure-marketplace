@@ -242,18 +242,6 @@ hr {
     color: var(--price-text-color);
 }
 
-.price-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.price-ticker {
-    font-size: 0.7rem;
-    margin-left: 2px;
-    color: var(--text-color);
-}
-
 h3 {
     margin: 0;
     color: var(--price-text-color);

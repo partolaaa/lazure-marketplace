@@ -2,6 +2,7 @@ const SOLANA_NET = 'devnet';
 const LOCALSTORAGE_USER_REJECTED_ID = 'userRejectedWalletConnection';
 
 let subscribers = [];
+
 class WalletManager {
     constructor() {
         this.wallet = null;
@@ -47,7 +48,7 @@ class WalletManager {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ walletId: this.getWalletString() })
+            body: JSON.stringify({walletId: this.getWalletString()})
         })
             .then(response => {
                 if (!response.ok) {
@@ -131,10 +132,10 @@ class WalletManager {
 
     async transferSol(recipientWalletAddress, amount) {
         try {
-            const { solana } = window;
+            const {solana} = window;
             if (solana && solana.isPhantom) {
                 const provider = solana;
-                await provider.connect({ onlyIfTrusted: false });
+                await provider.connect({onlyIfTrusted: false});
                 const connection = walletManager.getSolanaConnection();
                 const transaction = new solanaWeb3.Transaction().add(
                     solanaWeb3.SystemProgram.transfer({
@@ -144,7 +145,7 @@ class WalletManager {
                     })
                 );
 
-                let { blockhash } = await connection.getRecentBlockhash();
+                let {blockhash} = await connection.getRecentBlockhash();
                 transaction.recentBlockhash = blockhash;
                 transaction.feePayer = provider.publicKey;
 
@@ -155,17 +156,22 @@ class WalletManager {
                 createToast("success", `You successfully sent ${amount} to ${this.shortenWalletAddress(recipientWalletAddress)}!`)
                 let balance = await this.getAccountBalance(this.wallet.publicKey);
                 document.getElementById("balance").innerText = `${parseFloat(balance).toFixed(2)} SOL`;
+
+                return signature;
             } else {
-                createToast("warning",'Phantom wallet not found!');
+                createToast("warning", 'Phantom wallet not found!');
             }
         } catch (error) {
-            createToast("error",'Error while sending your sol.');
-            //console.error(error);
+            createToast("error", 'Error while sending your sol.');
         }
     }
 
     shortenWalletAddress(fullAddress) {
         return fullAddress.length > 8 ? `${fullAddress.slice(0, 5)}...${fullAddress.slice(-3)}` : fullAddress;
+    }
+
+    shortenTransactionSignature(signature) {
+        return signature.length > 15 ? `${signature.slice(0, 7)}...${signature.slice(-8)}` : signature;
     }
 
     async disconnectWallet() {
@@ -209,21 +215,71 @@ class WalletManager {
 }
 
 const walletManager = new WalletManager();
-document.getElementById('profile-balance').addEventListener('click', function(event) {
+document.getElementById('profile-balance').addEventListener('click', function (event) {
     walletManager.showWalletInfo();
     event.stopPropagation();
 });
 
-document.getElementById('disconnect-wallet').addEventListener('click', function() {
+document.getElementById('disconnect-wallet').addEventListener('click', function () {
     walletManager.disconnectWallet();
 });
 
 async function handleTransferSol(product, buyLoader) {
     try {
         const walletID = await getProductOwnerWalletByProductId(product.product_id);
-        await walletManager.transferSol(walletID, product.price);
+        let signature = await walletManager.transferSol(walletID, product.price);
         buyLoader.style.display = "none";
+
+        await addTransaction(walletID, signature, product);
     } catch (error) {
         console.error(error);
     }
+}
+
+async function addTransaction(sellerWallet, signature, product) {
+    let seller = await getUserByWalletId(sellerWallet);
+    let buyer = await getUserByWalletId(walletManager.getWalletString());
+
+    let transaction = {
+        "sellerId": seller.userId,
+        "buyerId": buyer.userId,
+        "productId": product.product_id,
+        "txId": signature
+    }
+
+    fetch("/api/transactions", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(transaction)
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => Promise.reject(text));
+            }
+            return response.text();
+        })
+        .catch(error => {
+            createToast("error", error);
+        });
+}
+
+async function getUserByWalletId(walletId) {
+    let user;
+    try {
+        const response = await fetch("/api/users/wallet/" + walletId, {
+            method: 'GET',
+        });
+
+        if (!response.ok) {
+            throw new Error("Couldn't get user by wallet address: " + response.statusText);
+        }
+
+        user = await response.json();
+    } catch (error) {
+        createToast("warning", error);
+    }
+
+    return user;
 }

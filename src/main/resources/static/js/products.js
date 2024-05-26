@@ -1,17 +1,20 @@
-function createProductElement(product) {
-    const productDiv = document.createElement('div');
-    productDiv.className = 'product';
-
+function generatePreviewImageForProduct(product) {
     const imageMap = {
         1: 'code.png',
         2: 'asset.png',
         3: 'intellectual-property.png',
         4: 'coupon.png'
     };
-
     const img = document.createElement('img');
     img.src = `/img/${imageMap[product.category_id] || 'broken-image.png'}`;
     img.alt = product.name;
+
+    return img;
+}
+
+function createProductElement(product) {
+    const productDiv = document.createElement('div');
+    productDiv.className = 'product';
 
     const infoDiv = document.createElement('div');
     infoDiv.className = 'short-product-info';
@@ -34,7 +37,7 @@ function createProductElement(product) {
 
     infoDiv.appendChild(nameP);
     infoDiv.appendChild(priceP);
-    productDiv.appendChild(img);
+    productDiv.appendChild(generatePreviewImageForProduct(product));
     productDiv.appendChild(infoDiv);
 
     return productDiv;
@@ -44,7 +47,7 @@ async function getProductOwnerWalletByProductId(productId) {
     let walletID;
 
     try {
-        const response = await fetch("api/users/get-product-owner-wallet-by-product-id/" + productId, {
+        const response = await fetch("/api/users/get-product-owner-wallet-by-product-id/" + productId, {
             method: 'GET',
         });
 
@@ -59,6 +62,24 @@ async function getProductOwnerWalletByProductId(productId) {
     }
 
     return walletID;
+}
+async function getProductByProductId(productId) {
+    let product;
+    try {
+        const response = await fetch("/api/products/" + productId, {
+            method: 'GET',
+        });
+
+        if (!response.ok) {
+            throw new Error("Couldn't get product info: " + response.statusText);
+        }
+
+        product = await response.json();
+    } catch (error) {
+        createToast("warning", error);
+    }
+
+    return product;
 }
 
 function createProductInfoPopup(product) {

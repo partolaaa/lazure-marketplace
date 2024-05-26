@@ -15,7 +15,7 @@ document.getElementById('search-input').addEventListener('input', function(event
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('api/categories')
+    fetch('/api/categories')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok: ' + response.statusText);
@@ -117,7 +117,7 @@ function loadListings(isClearContainer,
         parameters += `&offset=${container.querySelectorAll('.product').length}`;
     }
 
-    return fetch(`api/products?${parameters}`)
+    return fetch(`/api/products?${parameters}`)
         .then(response => response.json())
         .then(data => {
             if (isClearContainer) {

@@ -39,4 +39,9 @@ public class ProductController {
                                         ProductCriteria productCriteria) {
         return productService.getProducts(limit, offset, productCriteria);
     }
+
+    @GetMapping("/{productId}")
+    public ProductDto getProduct(@PathVariable Long productId, HttpSession session) {
+        return productService.getProductById(productId, session);
+    }
 }

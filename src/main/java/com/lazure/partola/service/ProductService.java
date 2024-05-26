@@ -31,9 +31,10 @@ import static java.lang.String.format;
 @Slf4j
 public class ProductService {
     private final RestTemplate restTemplate;
-
+    private final String BEARER_PREFIX = "Bearer ";
     @Value("${products.api.url}")
     private String PRODUCTS_API_URL;
+
     @Autowired
     public ProductService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
@@ -43,7 +44,6 @@ public class ProductService {
         try {
             String jwtToken = session.getAttribute("jwtToken").toString();
             HttpHeaders headers = new HttpHeaders();
-            String BEARER_PREFIX = "Bearer ";
             headers.set(HttpHeaders.AUTHORIZATION, format("%s%s", BEARER_PREFIX, jwtToken));
             HttpEntity<ProductDto> request = new HttpEntity<>(productDto, headers);
 
@@ -103,6 +103,47 @@ public class ProductService {
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new DataNotRetrievedException("Error while retrieving products.");
+        }
+    }
+
+    public ProductDto getProductById(Long productId, HttpSession session) {
+        try {
+            String jwtToken = session.getAttribute("jwtToken").toString();
+            HttpHeaders headers = new HttpHeaders();
+            headers.set(HttpHeaders.AUTHORIZATION, String.format("%s%s", BEARER_PREFIX, jwtToken));
+
+            String url = String.format("%s/product/%d", PRODUCTS_API_URL, productId);
+
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<ProductDto> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    entity,
+                    new ParameterizedTypeReference<>() {
+                    }
+            );
+            return response.getBody();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new DataNotRetrievedException(String.format("Error while retrieving product with id %d.", productId));
+        }
+    }
+
+    public ProductDto getProductByIdWithoutAuth(Long productId) {
+        try {
+            String url = format("%s/product/%d", PRODUCTS_API_URL, productId);
+            ResponseEntity<ProductDto> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<>() {
+                    }
+            );
+            return response.getBody();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new DataNotRetrievedException(format("Error while retrieving product with id %d.", productId));
         }
     }
 }

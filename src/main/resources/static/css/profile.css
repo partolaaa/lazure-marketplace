@@ -18,6 +18,9 @@ body {
 
 .profile-info-container img {
     width: 3rem;
+    padding: 4px;
+    background-color: var(--secondary-contrast-color);
+    border-radius: 100px;
 }
 
 .profile-info-container p {

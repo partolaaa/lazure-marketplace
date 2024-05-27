@@ -4,31 +4,16 @@ import com.lazure.partola.model.dto.FullTransactionInfoDto;
 import com.lazure.partola.model.dto.ProductDto;
 import com.lazure.partola.model.dto.TransactionDto;
 import com.lazure.partola.model.dto.UserDto;
-import com.lazure.partola.service.ProductService;
-import com.lazure.partola.service.UserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * @author Ivan Partola
  */
-@Component
-@RequiredArgsConstructor
-public class TransactionMapper {
-    private final UserService userService;
-    private final ProductService productService;
-
-    public FullTransactionInfoDto toFullTransactionInfoDto(TransactionDto transactionDto) {
-        UserDto buyer = userService.getUserById(transactionDto.getBuyerId());
-        UserDto seller = userService.getUserById(transactionDto.getSellerId());
-
-        ProductDto productDto = productService.getProductByIdWithoutAuth(transactionDto.getProductId());
-
-        return new FullTransactionInfoDto(
-                buyer.getWalletId(),
-                seller.getWalletId(),
-                transactionDto.getCreatedTime(),
-                transactionDto.getTxId(),
-                productDto);
-    }
+@Mapper(componentModel = "spring")
+public abstract class TransactionMapper {
+    @Mapping(target = "buyerWalletId", source = "buyer.walletId")
+    @Mapping(target = "sellerWalletId", source = "seller.walletId")
+    @Mapping(target = "productDto", source = "productDto")
+    public abstract FullTransactionInfoDto toFullTransactionInfoDto(TransactionDto transactionDto, UserDto buyer, UserDto seller, ProductDto productDto);
 }

@@ -5,7 +5,10 @@ body {
 .profile-info-container {
     display: flex;
     align-items: center;
-    width: 101%;
+    position: fixed;
+    left: 0;
+    right: 0;
+    width: 100%;
     gap: 0.5rem;
     padding-bottom: 6px;
     padding-top: 6px;
@@ -103,6 +106,7 @@ span.sell {
     align-items: center;
     flex-direction: column;
     gap: 2rem;
+    margin-top: 70px;
 }
 
 .transaction-product-info {

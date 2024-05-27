@@ -7,26 +7,20 @@ import com.lazure.partola.model.dto.FullTransactionInfoDto;
 import com.lazure.partola.model.dto.ProductDto;
 import com.lazure.partola.model.dto.TransactionDto;
 import com.lazure.partola.model.dto.UserDto;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
-
-import static java.lang.String.format;
 
 /**
  * @author Ivan Partola
@@ -39,38 +33,43 @@ public class TransactionService {
 
     @Value("${accounts.api.url.path.transactions}")
     private String TRANSACTIONS_URL_PATH;
+
     private final TransactionMapper transactionMapper;
     private final UserService userService;
     private final ProductService productService;
-    private final RestTemplate restTemplate;
+    private WebClient webClient;
 
     @Autowired
-    public TransactionService(TransactionMapper transactionMapper, UserService userService, ProductService productService, RestTemplateBuilder restTemplateBuilder) {
+    public TransactionService(TransactionMapper transactionMapper, UserService userService, ProductService productService) {
         this.transactionMapper = transactionMapper;
         this.userService = userService;
         this.productService = productService;
-        this.restTemplate = restTemplateBuilder.build();
+    }
+
+    @PostConstruct
+    public void init() {
+        this.webClient = WebClient.builder()
+                .baseUrl(ACCOUNTS_API_URL)
+                .build();
     }
 
     public List<FullTransactionInfoDto> getTransactionsByWalletId(String walletId) {
         try {
-            URIBuilder uriBuilder = new URIBuilder(format("%s/%s", ACCOUNTS_API_URL, TRANSACTIONS_URL_PATH));
-            uriBuilder.addParameter("walletId", walletId);
-            ResponseEntity<List<TransactionDto>> response = restTemplate.exchange(
-                    uriBuilder.build().toString(),
-                    HttpMethod.GET,
-                    null,
-                    new ParameterizedTypeReference<>() {
-                    }
-            );
-            return Objects.requireNonNull(response.getBody()).stream().map(transactionDto -> {
+            String url = String.format("%s/%s?walletId=%s", ACCOUNTS_API_URL, TRANSACTIONS_URL_PATH, walletId);
+            List<TransactionDto> transactionList = webClient.get()
+                    .uri(url)
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<List<TransactionDto>>() {})
+                    .block();
+
+            return Objects.requireNonNull(transactionList).stream().map(transactionDto -> {
                 UserDto buyer = userService.getUserById(transactionDto.getBuyerId());
                 UserDto seller = userService.getUserById(transactionDto.getSellerId());
                 ProductDto productDto = productService.getProductByIdWithoutAuth(transactionDto.getProductId());
                 return transactionMapper.toFullTransactionInfoDto(transactionDto, buyer, seller, productDto);
             }).toList();
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("Error while retrieving transactions: {}", e.getMessage());
             throw new DataNotRetrievedException("Error while retrieving transactions.");
         }
     }
@@ -78,22 +77,21 @@ public class TransactionService {
     public void add(TransactionDto transactionDto, HttpSession session) {
         try {
             transactionDto.setCreatedTime(LocalDateTime.now(ZoneOffset.UTC));
-
-            String jwtToken = session.getAttribute("jwtToken").toString();
-            HttpHeaders headers = new HttpHeaders();
+            String jwtToken = Objects.requireNonNull(session.getAttribute("jwtToken")).toString();
             String BEARER_PREFIX = "Bearer ";
-            headers.set(HttpHeaders.AUTHORIZATION, format("%s%s", BEARER_PREFIX, jwtToken));
-            HttpEntity<TransactionDto> request = new HttpEntity<>(transactionDto, headers);
-            System.out.println(request.getBody());
-            restTemplate.exchange(
-                    format("%s/%s", ACCOUNTS_API_URL, TRANSACTIONS_URL_PATH),
-                    HttpMethod.POST,
-                    request,
-                    String.class
-            );
+            String url = String.format("%s/%s", ACCOUNTS_API_URL, TRANSACTIONS_URL_PATH);
+
+            webClient.post()
+                    .uri(url)
+                    .header(HttpHeaders.AUTHORIZATION, BEARER_PREFIX + jwtToken)
+                    .bodyValue(transactionDto)
+                    .retrieve()
+                    .bodyToMono(Void.class)
+                    .block();
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("Error while adding a new transaction: {}", e.getMessage());
             throw new TransactionNotAddedException("Error while adding a new transaction.");
         }
     }
 }
+

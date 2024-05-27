@@ -4,7 +4,6 @@ import com.lazure.partola.exception.DataNotRetrievedException;
 import com.lazure.partola.model.dto.CategoryDto;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -26,11 +25,6 @@ public class CategoryService {
 
     @Value("${products.api.url.path.categories}")
     private String CATEGORY_URL_PATH;
-
-    @Autowired
-    public CategoryService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl(PRODUCTS_API_URL).build();
-    }
 
     @PostConstruct
     public void init() {

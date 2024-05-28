@@ -3,10 +3,7 @@ package com.lazure.partola.service;
 import com.lazure.partola.exception.DataNotRetrievedException;
 import com.lazure.partola.exception.TransactionNotAddedException;
 import com.lazure.partola.mapper.TransactionMapper;
-import com.lazure.partola.model.dto.FullTransactionInfoDto;
-import com.lazure.partola.model.dto.ProductDto;
-import com.lazure.partola.model.dto.TransactionDto;
-import com.lazure.partola.model.dto.UserDto;
+import com.lazure.partola.model.dto.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -74,7 +71,7 @@ public class TransactionService {
         }
     }
 
-    public void add(TransactionDto transactionDto, HttpSession session) {
+    public void add(TransactionFormattedTimeDto transactionDto, HttpSession session) {
         try {
             transactionDto.setCreatedTime(LocalDateTime.now(ZoneOffset.UTC));
             String jwtToken = Objects.requireNonNull(session.getAttribute("jwtToken")).toString();

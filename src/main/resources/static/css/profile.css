@@ -1,5 +1,6 @@
 body {
     padding-top: 37px;
+    overflow: auto;
 }
 
 .profile-info-container {

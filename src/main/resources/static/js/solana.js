@@ -230,7 +230,9 @@ async function handleTransferSol(product, buyLoader) {
         let signature = await walletManager.transferSol(walletID, product.price);
         buyLoader.style.display = "none";
 
-        await addTransaction(walletID, signature, product);
+        if (signature && walletID) {
+            await addTransaction(walletID, signature, product);
+        }
     } catch (error) {
         console.error(error);
     }
@@ -246,6 +248,8 @@ async function addTransaction(sellerWallet, signature, product) {
         "productId": product.product_id,
         "txId": signature
     }
+
+    console.log(transaction);
 
     fetch("/api/transactions", {
         method: 'POST',

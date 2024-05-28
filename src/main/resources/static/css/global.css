@@ -53,6 +53,7 @@
     --light-red: #f79292;
     --light-red-background: rgba(247, 146, 146, 0.16);
     --filter-white-shadow: drop-shadow(0 0 0.2rem white);
+    --filter-green-shadow: drop-shadow(0 0 0.2rem var(--light-green));
 }
 body {
     background-color: var(--background-color);

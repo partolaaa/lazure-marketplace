@@ -2,47 +2,48 @@ document.getElementById("add-product").addEventListener('click', function() {
     document.getElementById("overlay").style.display = 'block';
     document.getElementById("popup").style.display = 'block';
 
+    document.getElementById("add-product-form").reset();
+
     if (walletManager.wallet) {
         document.getElementById("submit-product-button").disabled = false;
         document.getElementById("submit-product-button").classList.remove("button-disabled");
         document.getElementById("submit-product-tooltip").style.display = "none";
-
-        document.getElementById('add-product-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            let categoryId = document.querySelector('input[name="categoryId"]');
-            if (!categoryId.value) {
-                createToast("warning", "Please, select product type.");
-                return;
-            }
-
-            let form = event.target;
-            let data = new FormData(form);
-
-            fetch(form.action, {
-                method: 'POST',
-                body: data
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.text().then(text => Promise.reject(text));
-                    }
-                    return response.text();
-                })
-                .then(() => {
-                    createToast("success", "Product added successfully!");
-                    getAllListingsByWallet();
-                })
-                .catch(error => {
-                    createToast("warning", error);
-                });
-
-        });
     } else {
         document.getElementById("submit-product-button").disabled = true;
         document.getElementById("submit-product-button").classList.add("button-disabled");
         document.getElementById("submit-product-tooltip").style.display = "block";
     }
+});
+
+document.getElementById('add-product-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    let categoryId = document.querySelector('input[name="categoryId"]');
+    if (!categoryId.value) {
+        createToast("warning", "Please, select product type.");
+        return;
+    }
+
+    let form = event.target;
+    let data = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        body: data
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => Promise.reject(text));
+            }
+            return response.text();
+        })
+        .then(() => {
+            createToast("success", "Product added successfully!");
+            getAllListingsByWallet();
+        })
+        .catch(error => {
+            createToast("warning", error);
+        });
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -160,7 +161,7 @@ function getAllListingsByWallet() {
                 });
             }
         })
-        .catch(error => {
+        .catch(() => {
             loader.style.display = 'none';
             createToast("error", "Failed to load products.");
         });

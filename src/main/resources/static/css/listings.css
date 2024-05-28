@@ -10,6 +10,7 @@ body {
     overflow-y: auto;
     padding-right: 15px;
     grid-template-columns: repeat(auto-fit, minmax(150px, 0fr));
+    padding-top: 10px;
 }
 
 .product {
@@ -51,11 +52,24 @@ body {
             0 0 17px var(--primary-color);
 }
 
+.my-listed-product {
+    border: solid 1px var(--submit-btn-color);
+    cursor: not-allowed;
+}
+
 .product:not(.add-product) img {
     transition: transform 0.3s ease;
 }
 
+.product:not(.my-listed-product) img {
+    transition: transform 0.3s ease;
+}
+
 .product:not(.add-product):hover img {
+    transform: scale(1.1);
+}
+
+.product:not(.my-listed-product):hover img {
     transform: scale(1.1);
 }
 

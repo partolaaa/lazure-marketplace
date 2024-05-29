@@ -1,7 +1,8 @@
 const SOLANA_NET = 'devnet';
 const LOCALSTORAGE_USER_REJECTED_ID = 'userRejectedWalletConnection';
 
-let subscribers = [];
+let subscribersOnReady = [];
+let subscribersOnDisconnected = [];
 
 class WalletManager {
     constructor() {
@@ -26,7 +27,15 @@ class WalletManager {
         if (this.wallet) {
             callback();
         } else {
-            subscribers.push(callback);
+            subscribersOnReady.push(callback);
+        }
+    }
+
+    onWalletDisconnected(callback) {
+        if (!this.wallet) {
+            callback();
+        } else {
+            subscribersOnDisconnected.push(callback);
         }
     }
 
@@ -35,7 +44,14 @@ class WalletManager {
             createToast("warning", "Wallet not ready yet.");
             return;
         }
-        subscribers.forEach(callback => callback());
+        subscribersOnReady.forEach(callback => callback());
+    }
+    notifySubscribersOnDisconnected() {
+        if (this.wallet) {
+            createToast("warning", "Wallet not ready yet.");
+            return;
+        }
+        subscribersOnDisconnected.forEach(callback => callback());
     }
 
     getSolanaConnection() {
@@ -55,7 +71,7 @@ class WalletManager {
                     throw new Error('Network response was not ok: ' + response.statusText);
                 }
             })
-            .catch(error => {
+            .catch(() => {
                 throw new Error("Error while getting login data.");
             });
     }
@@ -194,6 +210,8 @@ class WalletManager {
                 }).then(response => response.text())
                     .then(() => createToast("info", "Wallet was successfully disconnected!"))
                     .catch(error => createToast("error", `Error disconnecting wallet: ${error}`));
+
+                this.notifySubscribersOnDisconnected();
             } catch (error) {
                 createToast("error", `Error disconnecting wallet: ${error}`);
             }

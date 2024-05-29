@@ -23,7 +23,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ProductQueryService {
     private WebClient webClient;
-    private final String BEARER_PREFIX = "Bearer ";
 
     @Value("${products.api.url}")
     private String PRODUCTS_API_URL;
@@ -54,11 +53,14 @@ public class ProductQueryService {
                     .bodyToMono(new ParameterizedTypeReference<List<ProductDto>>() {})
                     .block());
 
-            List<ProductOwnerDto> productOwnerDtos = userService.getMultipleProductOwners(productDtos);
-            productDtos.forEach(productDto -> productOwnerDtos.stream()
-                    .filter(productOwnerDto -> productOwnerDto.getProductId().equals(productDto.getProductId()))
-                    .findFirst()
-                    .ifPresent(productOwnerDto -> productDto.setWalletId(productOwnerDto.getWalletId())));
+            if (!productDtos.isEmpty()) {
+                List<ProductOwnerDto> productOwnerDtos = userService.getMultipleProductOwners(productDtos);
+                productDtos.forEach(productDto -> productOwnerDtos.stream()
+                        .filter(productOwnerDto -> productOwnerDto.getProductId().equals(productDto.getProductId()))
+                        .findFirst()
+                        .ifPresent(productOwnerDto -> productDto.setWalletId(productOwnerDto.getWalletId())));
+            }
+
 
             return productDtos;
         } catch (Exception e) {

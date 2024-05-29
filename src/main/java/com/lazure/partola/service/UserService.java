@@ -10,9 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriBuilder;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -84,6 +81,7 @@ public class UserService {
         List<Long> productIds = productDtos.stream()
                 .map(ProductDto::getProductId)
                 .toList();
+
         try {
             String url = format("%s/%s", USERS_URL_PATH, "get-product-owners");
             return webClient.get()

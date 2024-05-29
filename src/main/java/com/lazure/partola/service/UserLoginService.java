@@ -3,9 +3,11 @@ package com.lazure.partola.service;
 import com.lazure.partola.model.dto.UserDto;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -17,8 +19,10 @@ import java.util.Objects;
  */
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UserLoginService {
     private WebClient webClient;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Value("${accounts.api.url}")
     private String ACCOUNTS_API_URI;
@@ -54,6 +58,7 @@ public class UserLoginService {
                             .block())
                     .replace(BEARER_PREFIX, "");
             session.setAttribute("jwtToken", jwtToken);
+            messagingTemplate.convertAndSend("/topic/login", "");
         } catch (Exception e) {
             log.error("Error during login: {}", e.getMessage());
             throw new RuntimeException("Login failed", e);
@@ -62,6 +67,7 @@ public class UserLoginService {
 
     public void logout(HttpSession session) {
         session.removeAttribute("jwtToken");
+        messagingTemplate.convertAndSend("/topic/logout", "");
     }
 }
 

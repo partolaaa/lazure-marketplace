@@ -40,7 +40,15 @@ function createProductElement(product) {
     productDiv.appendChild(generatePreviewImageForProduct(product));
     productDiv.appendChild(infoDiv);
 
+    if (isProductOwner(product)) {
+        productDiv.classList.add("my-listed-product");
+    }
+
     return productDiv;
+}
+
+function isProductOwner(product) {
+    return walletManager.wallet !== null && walletManager.getWalletString() === product.walletId;
 }
 
 async function getProductOwnerWalletByProductId(productId) {
@@ -84,6 +92,9 @@ async function getProductByProductId(productId) {
 
 function createProductInfoPopup(product) {
     let productDiv = createProductElement(product);
+    if (isProductOwner(product)) {
+        return productDiv;
+    }
     productDiv.addEventListener("click", function () {
         document.getElementById("popup-product-id").textContent = product.name;
         document.getElementById("overlay").style.display = 'block';

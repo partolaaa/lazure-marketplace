@@ -3,19 +3,15 @@ package com.lazure.partola.service;
 import com.lazure.partola.exception.DataNotRetrievedException;
 import com.lazure.partola.exception.ProductNotAddedException;
 import com.lazure.partola.model.dto.ProductDto;
-import com.lazure.partola.model.criteria.ProductCriteria;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 
@@ -59,40 +55,6 @@ public class ProductService {
             return webClient.get()
                     .uri(uriBuilder -> uriBuilder.path("/wallet/{wallet}")
                             .build(wallet))
-                    .retrieve()
-                    .bodyToMono(new ParameterizedTypeReference<List<ProductDto>>() {})
-                    .block();
-        } catch (Exception e) {
-            log.error("Error while retrieving products: {}", e.getMessage());
-            throw new DataNotRetrievedException("Error while retrieving products.");
-        }
-    }
-
-    public List<ProductDto> getProducts(int limit, int offset, ProductCriteria productCriteria) {
-        try {
-            return webClient.get()
-                    .uri(uriBuilder -> {
-                        URIBuilder builder;
-                        try {
-                            builder = new URIBuilder(PRODUCTS_API_URL + "/get-products");
-                        } catch (URISyntaxException e) {
-                            throw new RuntimeException(e);
-                        }
-                        builder.addParameter("limit", String.valueOf(limit))
-                                .addParameter("offset", String.valueOf(offset));
-
-                        URIBuilder finalBuilder = builder;
-                        productCriteria.title().ifPresent(title -> finalBuilder.addParameter("title", title));
-                        URIBuilder finalBuilder1 = builder;
-                        productCriteria.categoryId().ifPresent(ids -> ids.forEach(id ->
-                                finalBuilder1.addParameter("category_id", String.valueOf(id))));
-
-                        try {
-                            return URI.create(builder.build().toString());
-                        } catch (URISyntaxException e) {
-                            throw new RuntimeException(e);
-                        }
-                    })
                     .retrieve()
                     .bodyToMono(new ParameterizedTypeReference<List<ProductDto>>() {})
                     .block();

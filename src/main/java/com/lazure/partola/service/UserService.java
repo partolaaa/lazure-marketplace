@@ -1,12 +1,21 @@
 package com.lazure.partola.service;
 
 import com.lazure.partola.exception.DataNotRetrievedException;
+import com.lazure.partola.model.dto.ProductDto;
+import com.lazure.partola.model.dto.ProductOwnerDto;
 import com.lazure.partola.model.dto.UserDto;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.lang.String.format;
 
 /**
  * @author Ivan Partola
@@ -31,7 +40,7 @@ public class UserService {
 
     public UserDto getProductOwnerByProductId(Long productId) {
         try {
-            String url = String.format("%s/%s/get-product-owner-wallet-by-product-id/%d", ACCOUNTS_API_URL, USERS_URL_PATH, productId);
+            String url = format("%s/%s/get-product-owner-wallet-by-product-id/%d", ACCOUNTS_API_URL, USERS_URL_PATH, productId);
             return webClient.get()
                     .uri(url)
                     .retrieve()
@@ -45,7 +54,7 @@ public class UserService {
 
     public UserDto getUserById(Long userId) {
         try {
-            String url = String.format("%s/user/%d", ACCOUNTS_API_URL, userId);
+            String url = format("%s/user/%d", ACCOUNTS_API_URL, userId);
             return webClient.get()
                     .uri(url)
                     .retrieve()
@@ -53,13 +62,13 @@ public class UserService {
                     .block();
         } catch (Exception e) {
             log.error("Error while getting user by id {}: {}", userId, e.getMessage());
-            throw new DataNotRetrievedException(String.format("Error while getting user by id %d.", userId));
+            throw new DataNotRetrievedException(format("Error while getting user by id %d.", userId));
         }
     }
 
     public UserDto getUserByWalletId(String walletId) {
         try {
-            String url = String.format("%s/wallet/%s", ACCOUNTS_API_URL, walletId);
+            String url = format("%s/wallet/%s", ACCOUNTS_API_URL, walletId);
             return webClient.get()
                     .uri(url)
                     .retrieve()
@@ -67,7 +76,28 @@ public class UserService {
                     .block();
         } catch (Exception e) {
             log.error("Error while getting user by walletId {}: {}", walletId, e.getMessage());
-            throw new DataNotRetrievedException(String.format("Error while getting user by walletId %s.", walletId));
+            throw new DataNotRetrievedException(format("Error while getting user by walletId %s.", walletId));
+        }
+    }
+
+    public List<ProductOwnerDto> getMultipleProductOwners(List<ProductDto> productDtos) {
+        List<Long> productIds = productDtos.stream()
+                .map(ProductDto::getProductId)
+                .toList();
+        try {
+            String url = format("%s/%s", USERS_URL_PATH, "get-product-owners");
+            return webClient.get()
+                    .uri(uriBuilder -> {
+                        uriBuilder.path(url);
+                        productIds.forEach(id -> uriBuilder.queryParam("productId", id));
+                        return uriBuilder.build();
+                    })
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<List<ProductOwnerDto>>() {})
+                    .block();
+        } catch (Exception e) {
+            log.error("Error while getting products owners: {}", e.getMessage());
+            throw new DataNotRetrievedException("Error while getting products owners");
         }
     }
 }

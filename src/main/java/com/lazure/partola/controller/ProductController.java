@@ -2,6 +2,7 @@ package com.lazure.partola.controller;
 
 import com.lazure.partola.model.dto.ProductDto;
 import com.lazure.partola.model.criteria.ProductCriteria;
+import com.lazure.partola.service.ProductQueryService;
 import com.lazure.partola.service.ProductService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import java.util.List;
 @RestController
 public class ProductController {
     private final ProductService productService;
+    private final ProductQueryService productQueryService;
     @PostMapping
     public void add(@ModelAttribute ProductDto productDto, HttpSession session) {
         productService.add(productDto, session);
@@ -37,7 +39,7 @@ public class ProductController {
     public List<ProductDto> getProducts(@RequestParam(defaultValue = "40") int limit,
                                         @RequestParam(defaultValue = "0") int offset,
                                         ProductCriteria productCriteria) {
-        return productService.getProducts(limit, offset, productCriteria);
+        return productQueryService.getProducts(limit, offset, productCriteria);
     }
 
     @GetMapping("/{productId}")

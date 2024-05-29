@@ -25,4 +25,5 @@ public class ProductDto {
     private String resourceLink;
     @JsonProperty("category_id")
     private Integer categoryId;
+    private String walletId;
 }

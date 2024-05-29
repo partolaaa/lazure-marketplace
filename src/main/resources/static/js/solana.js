@@ -305,3 +305,25 @@ async function getUserByWalletId(walletId) {
 
     return user;
 }
+
+async function getCurrentSolanaPrice() {
+    try {
+        const response = await fetch("/api/solana/price", {
+            method: 'GET',
+        });
+
+        if (!response.ok) {
+            throw new Error("Couldn't get product info: " + response.statusText);
+        }
+
+        const solanaExchangeRate = await response.json();
+
+        if (solanaExchangeRate && solanaExchangeRate.price !== undefined) {
+            return solanaExchangeRate.price;
+        } else {
+            throw new Error("Price information is missing");
+        }
+    } catch (error) {
+        throw new Error("Failed to fetch Solana price: " + error.message);
+    }
+}

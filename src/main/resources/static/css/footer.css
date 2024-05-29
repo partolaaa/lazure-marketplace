@@ -1,0 +1,26 @@
+footer {
+    display: flex;
+    justify-content: right;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    font-family: Chakra, sans-serif;
+    padding: 5px;
+    border-bottom: 1px solid var(--secondary-contrast-color);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    border-top: solid 1px var(--secondary-color);
+}
+
+footer img {
+    width: 1.5rem;
+    padding: 3px;
+}
+
+footer p {
+    display: flex;
+    gap: 0.5rem;
+    margin: 0 10px 0 0;
+}

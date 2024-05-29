@@ -1,5 +1,6 @@
 package com.lazure.partola.service;
 
+import com.lazure.partola.exception.LoginFailedException;
 import com.lazure.partola.model.dto.UserDto;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
@@ -61,7 +62,7 @@ public class UserLoginService {
             messagingTemplate.convertAndSend("/topic/login", "");
         } catch (Exception e) {
             log.error("Error during login: {}", e.getMessage());
-            throw new RuntimeException("Login failed", e);
+            throw new LoginFailedException("Login failed with error: " + e);
         }
     }
 

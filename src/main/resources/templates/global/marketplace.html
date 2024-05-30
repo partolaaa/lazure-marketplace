@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="Marketplace"></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/global.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
@@ -19,7 +21,7 @@
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.js"></script>
 </head>
 <body>
     <div id="background"></div>
@@ -34,6 +36,15 @@
         </div>
         <div class="search-config-form">
             <div id="search-form-checkboxes"></div>
+            <div class="price-config-container">
+                <div class="slider-container">
+                    <div id="slider"></div>
+                </div>
+                <div class="input-container">
+                    <input type="number" id="minInput" min="0" max="9999" value="0">
+                    <input type="number" id="maxInput" min="0" max="9999" value="9999">
+                </div>
+            </div>
         </div>
     </div>
 

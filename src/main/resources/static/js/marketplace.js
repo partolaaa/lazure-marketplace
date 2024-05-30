@@ -142,3 +142,41 @@ document.getElementById("close-popup").addEventListener('click', function() {
     document.getElementById("overlay").style.display = 'none';
     document.getElementById("popup").style.display = 'none';
 });
+
+
+const slider = document.getElementById('slider');
+
+noUiSlider.create(slider, {
+    start: [0, 9999],
+    connect: true,
+    range: {
+        'min': 0,
+        'max': 9999
+    },
+    tooltips: [true, true],
+    format: {
+        to: function (value) {
+            return parseInt(value);
+        },
+        from: function (value) {
+            return parseInt(value);
+        }
+    }
+});
+
+slider.noUiSlider.on('update', function (values, handle) {
+    if (handle === 0) {
+        minInput.value = values[0];
+    } else {
+        maxInput.value = values[1];
+    }
+
+    console.log(`Min Price: ${values[0]}, Max Price: ${values[1]}`);
+});
+minInput.addEventListener('change', function () {
+    slider.noUiSlider.set([this.value, null]);
+});
+
+maxInput.addEventListener('change', function () {
+    slider.noUiSlider.set([null, this.value]);
+});

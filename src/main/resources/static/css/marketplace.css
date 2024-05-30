@@ -301,3 +301,62 @@ h3 {
     animation: none;
     background: var(--background-color);
 }
+
+.price-config-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 30px;
+}
+
+.slider-container {
+    text-align: center;
+    width: 200px;
+}
+#slider .noUi-handle {
+    background: var(--highlight-color);
+    box-shadow: none;
+    border-radius: 50px;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+    border: none;
+}
+#slider .noUi-connect {
+    background: #2b2d31;
+}
+#slider .noUi-tooltip {
+    display: none;
+}
+#slider .noUi-handle:before,
+#slider .noUi-handle:after {
+    display: none;
+}
+.input-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin-top: 20px;
+    width: 100%;
+}
+.input-container input {
+    width: 30%;
+    padding: 5px;
+    border: none;
+    border-radius: 3px;
+    text-align: center;
+    background-color: var(--secondary-contrast-color);
+    color: white;
+    font-family: monospace;
+}
+
+#slider {
+    height: 10px;
+}
+
+.noUi-target {
+    background: #dcdbdb;
+    border-radius: 4px;
+    border: none;
+}

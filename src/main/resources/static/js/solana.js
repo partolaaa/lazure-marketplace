@@ -93,6 +93,7 @@ class WalletManager {
             }
         } else {
             createToast("info", "You should install Phantom wallet first.");
+            window.open("https://phantom.app/", "_blank");
             throw new Error("Phantom wallet not found");
         }
     }

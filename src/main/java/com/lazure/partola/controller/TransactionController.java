@@ -1,7 +1,7 @@
 package com.lazure.partola.controller;
 
 import com.lazure.partola.model.dto.FullTransactionInfoDto;
-import com.lazure.partola.model.dto.TransactionFormattedTimeDto;
+import com.lazure.partola.model.dto.TransactionDto;
 import com.lazure.partola.service.TransactionService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class TransactionController {
     }
 
     @PostMapping
-    public void add(@RequestBody TransactionFormattedTimeDto transactionDto, HttpSession session) {
+    public void add(@RequestBody TransactionDto transactionDto, HttpSession session) {
         transactionService.add(transactionDto, session);
     }
 }

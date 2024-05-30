@@ -71,7 +71,7 @@ public class TransactionService {
         }
     }
 
-    public void add(TransactionFormattedTimeDto transactionDto, HttpSession session) {
+    public void add(TransactionDto transactionDto, HttpSession session) {
         try {
             transactionDto.setCreatedTime(LocalDateTime.now(ZoneOffset.UTC));
             String jwtToken = Objects.requireNonNull(session.getAttribute("jwtToken")).toString();

@@ -245,7 +245,7 @@ document.getElementById('disconnect-wallet').addEventListener('click', function 
 
 async function handleTransferSol(product, buyLoader) {
     try {
-        const walletID = await getProductOwnerWalletByProductId(product.product_id);
+        const walletID = await getProductOwnerWalletByProductId(product.productId);
         let signature = await walletManager.transferSol(walletID, product.price);
         buyLoader.style.display = "none";
 
@@ -264,7 +264,7 @@ async function addTransaction(sellerWallet, signature, product) {
     let transaction = {
         "sellerId": seller.userId,
         "buyerId": buyer.userId,
-        "productId": product.product_id,
+        "productId": product.productId,
         "txId": signature
     }
 

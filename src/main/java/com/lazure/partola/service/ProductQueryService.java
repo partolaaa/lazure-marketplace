@@ -45,7 +45,7 @@ public class ProductQueryService {
 
                         productCriteria.title().ifPresent(title -> uriBuilder.queryParam("title", title));
                         productCriteria.categoryId().ifPresent(ids ->
-                                ids.forEach(id -> uriBuilder.queryParam("category_id", id)));
+                                ids.forEach(id -> uriBuilder.queryParam("categoryId", id)));
 
                         return uriBuilder.build();
                     })

@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
             data.forEach(category => {
                 const option = document.createElement('span');
                 option.className = 'custom-option';
-                option.setAttribute('data-value', category.category_id);
+                option.setAttribute('data-value', category.categoryId);
                 option.textContent = category.name;
 
                 option.appendChild(prepareCategoryToolTip(category));

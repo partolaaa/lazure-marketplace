@@ -6,7 +6,7 @@ function generatePreviewImageForProduct(product) {
         4: 'coupon.png'
     };
     const img = document.createElement('img');
-    img.src = `/img/${imageMap[product.category_id] || 'broken-image.png'}`;
+    img.src = `/img/${imageMap[product.categoryId] || 'broken-image.png'}`;
     img.alt = product.name;
 
     return img;
@@ -113,7 +113,7 @@ function createProductInfoPopup(product) {
             document.getElementById("popup-buy-button").onclick = function () {
                 let buyLoader = document.getElementById("buy-loader");
                 buyLoader.style.display = "block";
-                handleTransferSol(product, buyLoader).then(r => buyLoader.style.display = "none");
+                handleTransferSol(product, buyLoader).then(() => buyLoader.style.display = "none");
             };
         } else {
             button.classList.add("button-disabled");

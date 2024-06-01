@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 checkbox.type = "checkbox";
                 checkbox.className = "search-config-property";
                 checkbox.name = "selectedCategory";
-                checkbox.value = category.category_id;
+                checkbox.value = category.categoryId;
                 checkbox.onclick = function () {
                     loadListings(true, document.getElementById('search-input').value);
                 }

@@ -70,17 +70,17 @@ function fillTransactionTable(transactions) {
         productDescriptionSpan.appendChild(productNameSpan);
         productDescriptionSpan.className = "transaction-product-info";
         productDescriptionSpan.onclick = async function () {
-            let currentProduct = await getProductByProductId(product.product_id);
+            let currentProduct = await getProductByProductId(product.productId);
             const overlay = document.getElementById("overlay");
             const productPopup = document.getElementById("popup");
 
             document.getElementById("popup-product-id").innerText = currentProduct.name;
             document.getElementById("popup-product-description").innerText = currentProduct.description;
-            if (!currentProduct.resource_link) {
+            if (!currentProduct.resourceLink) {
                 document.getElementById("popup-source-link-container").style.display = "none";
             } else {
-                document.getElementById("source-link").innerText = currentProduct.resource_link;
-                document.getElementById("source-link").href = currentProduct.resource_link;
+                document.getElementById("source-link").innerText = currentProduct.resourceLink;
+                document.getElementById("source-link").href = currentProduct.resourceLink;
             }
 
             overlay.style.display = "block";

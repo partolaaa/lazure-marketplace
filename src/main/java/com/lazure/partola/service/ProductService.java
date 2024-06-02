@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -36,7 +37,7 @@ public class ProductService {
 
     public void add(ProductDto productDto, HttpSession session) {
         try {
-            String jwtToken = getJwtTokenFromSession(session);
+            String jwtToken = getJwtTokenFromSession(session).orElseThrow(() -> new IllegalArgumentException("JWT token is missing in session"));
             webClient.post()
                     .uri("/product")
                     .header(HttpHeaders.AUTHORIZATION, BEARER_PREFIX + jwtToken)
@@ -66,15 +67,20 @@ public class ProductService {
 
     public ProductDto getProductById(Long productId, HttpSession session) {
         try {
-            String jwtToken = getJwtTokenFromSession(session);
-            return webClient.get()
-                    .uri("/product/{productId}", productId)
-                    .header(HttpHeaders.AUTHORIZATION, BEARER_PREFIX + jwtToken)
-                    .retrieve()
+            Optional<String> jwtTokenOpt = getJwtTokenFromSession(session);
+
+            WebClient.RequestHeadersSpec<?> request = webClient.get()
+                    .uri("/product/{productId}", productId);
+
+            if (jwtTokenOpt.isPresent()) {
+                request = request.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtTokenOpt.get());
+            }
+
+            return request.retrieve()
                     .bodyToMono(ProductDto.class)
                     .block();
         } catch (Exception e) {
-            log.error("Error while retrieving product with id {}: {}", productId, e.getMessage());
+            log.error("Error while retrieving product with id {}: ", productId, e);
             throw new DataNotRetrievedException(String.format("Error while retrieving product with id %d.", productId));
         }
     }
@@ -92,12 +98,9 @@ public class ProductService {
         }
     }
 
-    private String getJwtTokenFromSession(HttpSession session) {
-        Object token = session.getAttribute("jwtToken");
-        if (token == null) {
-            throw new IllegalArgumentException("JWT token is missing in session");
-        }
-        return token.toString();
+    private Optional<String> getJwtTokenFromSession(HttpSession session) {
+        return Optional.ofNullable(session.getAttribute("jwtToken"))
+                .map(Object::toString);
     }
 }
 

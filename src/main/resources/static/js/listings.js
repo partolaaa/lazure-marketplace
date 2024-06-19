@@ -137,7 +137,7 @@ function getAllListingsByWallet() {
     const container = document.querySelector('.main-products-container');
     fetch('/api/products/wallet/' + walletManager.getWalletString())
         .then(response => response.json())
-        .then(data => {
+        .then(async data => {
             loader.style.display = 'none';
             container.innerHTML = '';
             if (data.length === 0) {
@@ -156,9 +156,9 @@ function getAllListingsByWallet() {
 
                 container.appendChild(productDiv);
             } else {
-                data.forEach(product => {
-                    container.appendChild(createProductElement(product));
-                });
+                for (const product of data) {
+                    container.appendChild(await createProductElement(product));
+                }
             }
         })
         .catch(() => {

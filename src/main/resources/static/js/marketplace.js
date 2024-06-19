@@ -182,14 +182,14 @@ function loadListings(isClearContainer,
 
     return fetch(`/api/products?${parameters}`)
         .then(response => response.json())
-        .then(data => {
+        .then(async data => {
             if (isClearContainer) {
                 container.innerHTML = '';
             }
             const fragment = document.createDocumentFragment();
-            data.forEach(product => {
-                fragment.appendChild(createProductInfoPopup(product));
-            });
+            for (const product of data) {
+                fragment.appendChild(await createProductInfoPopup(product));
+            }
             container.appendChild(fragment);
         })
         .catch(error => {

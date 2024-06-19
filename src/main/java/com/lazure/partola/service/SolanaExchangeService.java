@@ -8,9 +8,12 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import static com.lazure.partola.config.CacheConfiguration.CURRENT_CACHE_NAME;
 
 /**
  * @author Ivan Partola
@@ -41,8 +44,10 @@ public class SolanaExchangeService {
                 .build();
     }
 
+    @Cacheable(CURRENT_CACHE_NAME)
     public SolanaPriceDto getSolanaPrice() {
         try {
+            log.info("Call external API to get solana price");
             return webClient.get()
                     .uri(uriBuilder -> uriBuilder
                             .queryParam("symbol", TICKER_SOL)

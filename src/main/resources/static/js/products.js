@@ -12,7 +12,7 @@ function generatePreviewImageForProduct(product) {
     return img;
 }
 
-function createProductElement(product) {
+async function createProductElement(product) {
     const productDiv = document.createElement('div');
     productDiv.className = 'product';
 
@@ -24,16 +24,31 @@ function createProductElement(product) {
     nameP.textContent = product.name;
 
     const priceP = document.createElement('p');
-    const priceSpan = document.createElement('span');
-    const tickerSpan = document.createElement('span');
-
     priceP.className = 'price-container';
-    priceSpan.textContent = product.price.toFixed(2);
-    priceSpan.className = "price"
-    tickerSpan.className = "price-ticker";
-    tickerSpan.innerText = "SOL"
-    priceP.appendChild(priceSpan);
-    priceP.appendChild(tickerSpan);
+
+    // SOL price and ticker
+    const priceSpan1 = document.createElement('span');
+    const tickerSpan1 = document.createElement('span');
+    priceSpan1.textContent = product.price.toFixed(2);
+    priceSpan1.className = 'price';
+    tickerSpan1.className = 'price-ticker';
+    tickerSpan1.innerText = 'SOL';
+
+    // USD price and ticker
+    const priceSpan2 = document.createElement('span');
+    const tickerSpan2 = document.createElement('span');
+    priceSpan2.textContent = (parseFloat(product.price) * parseFloat(await getCurrentSolanaPrice())).toFixed(2);
+    priceSpan2.className = 'price';
+    priceSpan2.style.marginLeft = "10px";
+    priceSpan2.style.fontSize = "12px";
+    tickerSpan2.className = 'price-ticker';
+    tickerSpan2.innerText = 'USD';
+
+    // Append both sets of price and ticker
+    priceP.appendChild(priceSpan1);
+    priceP.appendChild(tickerSpan1);
+    priceP.appendChild(priceSpan2);
+    priceP.appendChild(tickerSpan2);
 
     infoDiv.appendChild(nameP);
     infoDiv.appendChild(priceP);
@@ -41,11 +56,12 @@ function createProductElement(product) {
     productDiv.appendChild(infoDiv);
 
     if (isProductOwner(product)) {
-        productDiv.classList.add("my-listed-product");
+        productDiv.classList.add('my-listed-product');
     }
 
     return productDiv;
 }
+
 
 function isProductOwner(product) {
     return walletManager.wallet !== null && walletManager.getWalletString() === product.walletId;
@@ -90,8 +106,8 @@ async function getProductByProductId(productId) {
     return product;
 }
 
-function createProductInfoPopup(product) {
-    let productDiv = createProductElement(product);
+async function createProductInfoPopup(product) {
+    let productDiv = await createProductElement(product);
     if (isProductOwner(product)) {
         return productDiv;
     }

@@ -60,6 +60,59 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => {
             console.error('Failed to fetch categories:', error);
         });
+
+
+
+    fetch("/api/products/max-cost")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(maxCost => {
+            let maxCostPrice = parseInt(maxCost);
+            const maxInput = document.getElementById('maxInput');
+            maxInput.value = maxCostPrice;
+
+            const slider = document.getElementById('slider');
+
+            noUiSlider.create(slider, {
+                start: [0, maxCostPrice],
+                connect: true,
+                range: {
+                    'min': 0,
+                    'max': maxCostPrice
+                },
+                tooltips: [true, true],
+                format: {
+                    to: function (value) {
+                        return parseInt(value);
+                    },
+                    from: function (value) {
+                        return parseInt(value);
+                    }
+                }
+            });
+
+            slider.noUiSlider.on('update', function (values, handle) {
+                if (handle === 0) {
+                    minInput.value = values[0];
+                } else {
+                    maxInput.value = values[1];
+                }
+            });
+            minInput.addEventListener('change', function () {
+                slider.noUiSlider.set([this.value, null]);
+            });
+
+            maxInput.addEventListener('change', function () {
+                slider.noUiSlider.set([null, this.value]);
+            });
+        })
+        .catch(error => {
+            console.error('Failed to fetch categories:', error);
+        });
 });
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -85,6 +138,10 @@ document.addEventListener('DOMContentLoaded', function () {
         loadListings(false).finally(() => {
             isLoading = false;
         });
+    }
+
+    document.getElementById("save-price-button").onclick = function () {
+        loadListings(true);
     }
 });
 
@@ -117,6 +174,12 @@ function loadListings(isClearContainer,
         parameters += `&offset=${container.querySelectorAll('.product').length}`;
     }
 
+    let maxPrice = document.getElementById("maxInput").value;
+    let minPrice = document.getElementById("minInput").value;
+    if (maxPrice && minPrice) {
+        parameters += `&maxPrice=${maxPrice}&minPrice=${minPrice}`
+    }
+
     return fetch(`/api/products?${parameters}`)
         .then(response => response.json())
         .then(data => {
@@ -141,42 +204,4 @@ function loadListings(isClearContainer,
 document.getElementById("close-popup").addEventListener('click', function() {
     document.getElementById("overlay").style.display = 'none';
     document.getElementById("popup").style.display = 'none';
-});
-
-
-const slider = document.getElementById('slider');
-
-noUiSlider.create(slider, {
-    start: [0, 9999],
-    connect: true,
-    range: {
-        'min': 0,
-        'max': 9999
-    },
-    tooltips: [true, true],
-    format: {
-        to: function (value) {
-            return parseInt(value);
-        },
-        from: function (value) {
-            return parseInt(value);
-        }
-    }
-});
-
-slider.noUiSlider.on('update', function (values, handle) {
-    if (handle === 0) {
-        minInput.value = values[0];
-    } else {
-        maxInput.value = values[1];
-    }
-
-    console.log(`Min Price: ${values[0]}, Max Price: ${values[1]}`);
-});
-minInput.addEventListener('change', function () {
-    slider.noUiSlider.set([this.value, null]);
-});
-
-maxInput.addEventListener('change', function () {
-    slider.noUiSlider.set([null, this.value]);
 });

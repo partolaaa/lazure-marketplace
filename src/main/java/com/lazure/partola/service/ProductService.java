@@ -11,8 +11,10 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientException;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -22,6 +24,7 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class ProductService {
+
     private WebClient webClient;
     private final String BEARER_PREFIX = "Bearer ";
 
@@ -57,7 +60,8 @@ public class ProductService {
                     .uri(uriBuilder -> uriBuilder.path("/wallet/{wallet}")
                             .build(wallet))
                     .retrieve()
-                    .bodyToMono(new ParameterizedTypeReference<List<ProductDto>>() {})
+                    .bodyToMono(new ParameterizedTypeReference<List<ProductDto>>() {
+                    })
                     .block();
         } catch (Exception e) {
             log.error("Error while retrieving products: {}", e.getMessage());
@@ -66,6 +70,7 @@ public class ProductService {
     }
 
     public ProductDto getProductById(Long productId, HttpSession session) {
+
         try {
             Optional<String> jwtTokenOpt = getJwtTokenFromSession(session);
 
@@ -86,6 +91,7 @@ public class ProductService {
     }
 
     public ProductDto getProductByIdWithoutAuth(Long productId) {
+
         try {
             return webClient.get()
                     .uri("/product/{productId}", productId)
@@ -98,9 +104,30 @@ public class ProductService {
         }
     }
 
+    public Double getMaxCost() {
+        try {
+            Map<String, Double> response = webClient.get()
+                    .uri("/max-cost")
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<Map<String, Double>>() {
+                    })
+                    .block();
+
+            if (response == null || !response.containsKey("maxCost")) {
+                throw new DataNotRetrievedException("No max cost data found.");
+            }
+
+            return response.get("maxCost");
+        } catch (WebClientException e) {
+            log.error("Error while retrieving max cost", e);
+            throw new DataNotRetrievedException("Error while retrieving max cost.");
+        }
+    }
+
+
     private Optional<String> getJwtTokenFromSession(HttpSession session) {
+
         return Optional.ofNullable(session.getAttribute("jwtToken"))
                 .map(Object::toString);
     }
 }
-

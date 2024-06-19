@@ -46,4 +46,9 @@ public class ProductController {
     public ProductDto getProduct(@PathVariable Long productId, HttpSession session) {
         return productService.getProductById(productId, session);
     }
+
+    @GetMapping("/max-cost")
+    public Double getMaxCost() {
+        return productService.getMaxCost();
+    }
 }

@@ -41,7 +41,9 @@ public class ProductQueryService {
                     .uri(uriBuilder -> {
                         uriBuilder.path("/get-products")
                                 .queryParam("limit", limit)
-                                .queryParam("offset", offset);
+                                .queryParam("offset", offset)
+                                .queryParam("maxPrice", productCriteria.maxPrice())
+                                .queryParam("minPrice", productCriteria.minPrice());
 
                         productCriteria.title().ifPresent(title -> uriBuilder.queryParam("title", title));
                         productCriteria.categoryId().ifPresent(ids ->

@@ -24,94 +24,95 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.js"></script>
 </head>
 <body>
-    <div id="background"></div>
-    <ul class="notifications"></ul>
-    <div th:insert="~{parts/_header.html :: header}"></div>
-    <div id="search-config" class="search-config">
-        <h3 class="popup-name">Search Config</h3>
-        <hr>
-        <div id="close-search-config" class="close-sidebar">
-            <span class="line-icon line-top"></span>
-            <span class="line-icon line-bottom"></span>
-        </div>
-        <div class="search-config-form">
-            <div id="search-form-checkboxes"></div>
-            <div class="price-config-container">
-                <div class="slider-container">
-                    <div id="slider"></div>
-                </div>
-                <div class="input-container">
-                    <input type="number" id="minInput" min="0" max="9999" value="0">
-                    <input type="number" id="maxInput" min="0" max="9999" value="9999">
-                </div>
+<div id="background"></div>
+<ul class="notifications"></ul>
+<div th:insert="~{parts/_header.html :: header}"></div>
+<div id="search-config" class="search-config">
+    <h3 class="popup-name">Search Config</h3>
+    <hr>
+    <div id="close-search-config" class="close-sidebar">
+        <span class="line-icon line-top"></span>
+        <span class="line-icon line-bottom"></span>
+    </div>
+    <div class="search-config-form">
+        <div id="search-form-checkboxes"></div>
+        <div class="price-config-container">
+            <div class="slider-container">
+                <div id="slider"></div>
             </div>
+            <div class="input-container">
+                <input type="number" id="minInput" min="0" max="9999" value="0">
+                <input type="number" id="maxInput" min="0" max="9999" value="9999">
+            </div>
+            <button id="save-price-button">Save price</button>
         </div>
     </div>
+</div>
 
-    <div id="overlay" style="display:none;"></div>
-    <div id="popup" style="display:none;">
-        <button id="close-popup" class="close-popup close-button">&times;</button>
-        <h3 class="popup-name" id="popup-product-id">New Product</h3>
-        <hr>
+<div id="overlay" style="display:none;"></div>
+<div id="popup" style="display:none;">
+    <button id="close-popup" class="close-popup close-button">&times;</button>
+    <h3 class="popup-name" id="popup-product-id">New Product</h3>
+    <hr>
 
-        <div class="popup-product-info">
-            <div id="popup-buy-menu">
-                <img src="" id="popup-product-image" alt="product image">
-                <div class="popup-product-buy">
-                    <div>
-                        <div class="popup-product-status-container">
-                            <h3>Listed</h3>
-                            <div class="tooltip">
-                                <img class="info-icon" src="/img/info.png" alt="info" id="product-status-info">
-                                <span class="tooltiptext" id="product-status-text"></span>
-                            </div>
+    <div class="popup-product-info">
+        <div id="popup-buy-menu">
+            <img src="" id="popup-product-image" alt="product image">
+            <div class="popup-product-buy">
+                <div>
+                    <div class="popup-product-status-container">
+                        <h3>Listed</h3>
+                        <div class="tooltip">
+                            <img class="info-icon" src="/img/info.png" alt="info" id="product-status-info">
+                            <span class="tooltiptext" id="product-status-text"></span>
                         </div>
-                        <p class="price-container">
-                            <span id="popup-product-price"></span>
-                            <span class="price-ticker">SOL</span>
-                        </p>
                     </div>
-                    <button id="popup-buy-button" class="tooltip">
-                        Buy now<span class="loader-spinner" id="buy-loader" style="display: none"></span>
-                        <span class="tooltiptext" id="popup-buy-button-tooltiptext" style="display: none">You need to connect your wallet to buy this</span>
-                    </button>
+                    <p class="price-container">
+                        <span id="popup-product-price"></span>
+                        <span class="price-ticker">SOL</span>
+                    </p>
                 </div>
+                <button id="popup-buy-button" class="tooltip">
+                    Buy now<span class="loader-spinner" id="buy-loader" style="display: none"></span>
+                    <span class="tooltiptext" id="popup-buy-button-tooltiptext" style="display: none">You need to connect your wallet to buy this</span>
+                </button>
             </div>
-            <p id="popup-product-description"></p>
         </div>
+        <p id="popup-product-description"></p>
     </div>
+</div>
 
-    <div class="search-container">
-        <div class="search-box">
-            <img id="search-button" src="/img/search-interface-symbol.png" alt="search">
-            <input id="search-input" type="text" placeholder="What you want to find?">
-            <img id="configure-search-button" src="/img/setting-lines.png" alt="settings">
-        </div>
+<div class="search-container">
+    <div class="search-box">
+        <img id="search-button" src="/img/search-interface-symbol.png" alt="search">
+        <input id="search-input" type="text" placeholder="What you want to find?">
+        <img id="configure-search-button" src="/img/setting-lines.png" alt="settings">
     </div>
+</div>
 
-    <!--<hr>-->
+<!--<hr>-->
 
-    <div class="relative">
-        <div class="products-container loader" style="display: grid;">
-            <div class="product animated-background"></div>
-            <div class="product animated-background"></div>
-            <div class="product animated-background"></div>
-            <div class="product animated-background"></div>
-            <div class="product animated-background"></div>
-            <div class="product animated-background"></div>
-            <div class="product animated-background"></div>
-            <div class="product animated-background"></div>
-            <div class="product animated-background"></div>
-            <div class="product animated-background"></div>
-            <div class="product animated-background"></div>
-            <div class="product animated-background"></div>
-        </div>
+<div class="relative">
+    <div class="products-container loader" style="display: grid;">
+        <div class="product animated-background"></div>
+        <div class="product animated-background"></div>
+        <div class="product animated-background"></div>
+        <div class="product animated-background"></div>
+        <div class="product animated-background"></div>
+        <div class="product animated-background"></div>
+        <div class="product animated-background"></div>
+        <div class="product animated-background"></div>
+        <div class="product animated-background"></div>
+        <div class="product animated-background"></div>
+        <div class="product animated-background"></div>
+        <div class="product animated-background"></div>
     </div>
+</div>
 
-    <div class="relative">
-        <div class="products-container main-products-container"></div>
-    </div>
+<div class="relative">
+    <div class="products-container main-products-container"></div>
+</div>
 
-    <div th:insert="~{parts/_footer.html :: footer}"></div>
+<div th:insert="~{parts/_footer.html :: footer}"></div>
 </body>
 </html>

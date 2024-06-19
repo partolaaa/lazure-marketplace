@@ -8,5 +8,7 @@ import java.util.Optional;
  */
 public record ProductCriteria (
         Optional<String> title,
+        int maxPrice,
+        int minPrice,
         Optional<List<Integer>> categoryId) {
 }

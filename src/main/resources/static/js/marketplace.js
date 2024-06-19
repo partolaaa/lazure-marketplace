@@ -87,10 +87,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 tooltips: [true, true],
                 format: {
                     to: function (value) {
-                        return parseInt(value);
+                        return value.toFixed(2);
                     },
                     from: function (value) {
-                        return parseInt(value);
+                        return parseFloat(value);
                     }
                 }
             });

@@ -123,6 +123,7 @@ async function createProductInfoPopup(product) {
         if (product.youtubeLink) {
             const videoId = getYouTubeVideoId(product.youtubeLink);
             if (videoId) {
+                document.getElementById('video-container').replaceChildren();
                 const iframe = document.createElement('iframe');
                 iframe.width = "560";
                 iframe.height = "315";

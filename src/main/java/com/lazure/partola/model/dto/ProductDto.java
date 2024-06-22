@@ -20,6 +20,7 @@ public class ProductDto {
     private String description;
     private BigDecimal price;
     private String resourceLink;
+    private String youtubeLink;
     private Integer categoryId;
     private String walletId;
 }

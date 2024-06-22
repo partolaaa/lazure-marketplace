@@ -120,6 +120,25 @@ async function createProductInfoPopup(product) {
         document.getElementById("popup-product-description").textContent = product.description;
         document.getElementById("popup-product-price").textContent = product.price;
         document.getElementById("product-status-text").innerText = "This product is on sale now";
+        if (product.youtubeLink) {
+            const videoId = getYouTubeVideoId(product.youtubeLink);
+            if (videoId) {
+                const iframe = document.createElement('iframe');
+                iframe.width = "560";
+                iframe.height = "315";
+                iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                iframe.frameBorder = "0";
+                iframe.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
+                iframe.allowFullscreen = true;
+                document.getElementById('video-container').appendChild(iframe);
+                document.getElementById('video-container').style.display = "flex"
+            } else {
+                console.log("YouTube URL is not valid");
+                document.getElementById('video-container').style.display = "none";
+            }
+        } else {
+            document.getElementById('video-container').style.display = "none";
+        }
 
         let button = document.getElementById("popup-buy-button");
         if (walletManager.wallet) {
@@ -138,4 +157,9 @@ async function createProductInfoPopup(product) {
     });
 
     return productDiv;
+}
+
+function getYouTubeVideoId(url) {
+    const urlObj = new URL(url);
+    return urlObj.searchParams.get("v");
 }

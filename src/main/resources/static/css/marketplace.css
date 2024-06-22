@@ -378,3 +378,8 @@ h3 {
 #save-price-button:hover {
     background-color: var(--highlight-color);
 }
+
+#video-container {
+    justify-content: center;
+    margin-top: 15px;
+}

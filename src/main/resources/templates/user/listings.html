@@ -42,6 +42,7 @@
             <input type="hidden" id="categoryId" th:field="*{categoryId}" required>
             <p>Price (SOL):<span class="required-field-mark">*</span> <input type="text" placeholder="For now it's free...lol" th:field="*{price}" required/></p>
             <p>Resource Link:<span class="required-field-mark">*</span> <input type="text" placeholder="What you want to sell?" th:field="*{resourceLink}" required/></p>
+            <p>YouTube Link:<input type="text" placeholder="Link to your YouTube explanation" th:field="*{youtubeLink}"/></p>
             <p class="tooltip">
                 <input id="submit-product-button" type="submit" value="Submit">
                 <span class="tooltiptext" id="submit-product-tooltip" style="display: none">You need to connect your wallet to list items</span>

@@ -185,6 +185,7 @@ function loadListings(isClearContainer,
         .then(async data => {
             if (isClearContainer) {
                 container.innerHTML = '';
+                loader.style.display = 'grid';
             }
             const fragment = document.createDocumentFragment();
             for (const product of data) {
